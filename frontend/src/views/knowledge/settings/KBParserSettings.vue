@@ -1,17 +1,17 @@
 <template>
   <div class="kb-parser-settings">
     <div class="section-header">
-      <h2>解析引擎</h2>
-      <p class="section-description">为不同文件类型选择文档解析引擎。未配置的文件类型将使用内置解析引擎。</p>
+      <h2>{{ $t('kbSettings.parser.title') }}</h2>
+      <p class="section-description">{{ $t('kbSettings.parser.description') }}</p>
     </div>
 
     <div v-if="loading" class="loading-inline">
       <t-loading size="small" />
-      <span>加载中...</span>
+      <span>{{ $t('kbSettings.parser.loading') }}</span>
     </div>
 
     <div v-else-if="fileTypeGroups.length === 0" class="empty-hint">
-      <p>暂无可用解析引擎，或文档解析服务未配置。</p>
+      <p>{{ $t('kbSettings.parser.noEngineAvailable') }}</p>
     </div>
 
     <div v-else class="settings-group">
@@ -35,7 +35,7 @@
             @change="(val: string) => handleEngineChange(group.extensions, val)"
             style="width: 280px;"
             :status="hasAvailableEngine(group.extensions) ? 'default' : 'warning'"
-            placeholder="无可用引擎"
+            :placeholder="$t('kbSettings.parser.noEngine')"
           >
             <t-option
               v-for="opt in getEngineOptions(group.extensions)"
@@ -45,7 +45,7 @@
               :disabled="opt.disabled"
             >
               <t-tooltip
-                :content="`支持格式: ${opt.fileTypes.map(t => '.' + t).join('  ')}`"
+                :content="$t('kbSettings.supportedFormats') + ': ' + opt.fileTypes.map(ft => '.' + ft).join('  ')"
                 placement="left"
                 :show-arrow="false"
               >
@@ -57,25 +57,25 @@
                       theme="primary"
                       variant="light"
                       size="small"
-                    >默认</t-tag>
+                    >{{ $t('kbSettings.parser.default') }}</t-tag>
                     <t-tag
                       v-if="opt.disabled"
                       theme="danger"
                       variant="light"
                       size="small"
-                    >不可用</t-tag>
+                    >{{ $t('kbSettings.parser.unavailable') }}</t-tag>
                   </div>
                   <div class="engine-option-desc">{{ opt.desc }}</div>
                   <div v-if="opt.disabled && opt.reason" class="engine-option-reason">
                     {{ opt.reason }}
-                    <a class="go-settings" @click.stop.prevent="goToParserSettings">去设置 →</a>
+                    <a class="go-settings" @click.stop.prevent="goToParserSettings">{{ $t('kbSettings.parser.goSettings') }}</a>
                   </div>
                 </div>
               </t-tooltip>
             </t-option>
           </t-select>
           <div v-if="!hasAvailableEngine(group.extensions)" class="no-engine-warning">
-            <a class="go-settings" @click.prevent="goToParserSettings">前往配置 →</a>
+            <a class="go-settings" @click.prevent="goToParserSettings">{{ $t('kbSettings.parser.goConfig') }}</a>
           </div>
         </div>
       </div>
@@ -85,9 +85,12 @@
 
 <script setup lang="ts">
 import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { getParserEngines, type ParserEngineInfo } from '@/api/system'
 import { useUIStore } from '@/stores/ui'
 import { storeToRefs } from 'pinia'
+
+const { t } = useI18n()
 
 export interface ParserEngineRule {
   file_types: string[]
@@ -144,14 +147,14 @@ const fileTypeGroups = computed(() => {
   const txtExts = ['txt'].filter(e => ft.has(e))
   const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'webp'].filter(e => ft.has(e))
 
-  if (pdfExts.length) groups.push({ key: 'pdf', label: 'PDF 文档', icon: 'file-pdf', extensions: pdfExts })
-  if (officeExts.length) groups.push({ key: 'office', label: 'Word 文档', icon: 'file-word', extensions: officeExts })
-  if (pptExts.length) groups.push({ key: 'ppt', label: '演示文稿', icon: 'file-powerpoint', extensions: pptExts })
-  if (excelExts.length) groups.push({ key: 'excel', label: 'Excel 表格', icon: 'file-excel', extensions: excelExts })
-  if (csvExts.length) groups.push({ key: 'csv', label: 'CSV 文件', icon: 'file-excel', extensions: csvExts })
+  if (pdfExts.length) groups.push({ key: 'pdf', label: t('kbSettings.parser.fileTypePdf'), icon: 'file-pdf', extensions: pdfExts })
+  if (officeExts.length) groups.push({ key: 'office', label: t('kbSettings.parser.fileTypeWord'), icon: 'file-word', extensions: officeExts })
+  if (pptExts.length) groups.push({ key: 'ppt', label: t('kbSettings.parser.fileTypePpt'), icon: 'file-powerpoint', extensions: pptExts })
+  if (excelExts.length) groups.push({ key: 'excel', label: t('kbSettings.parser.fileTypeExcel'), icon: 'file-excel', extensions: excelExts })
+  if (csvExts.length) groups.push({ key: 'csv', label: t('kbSettings.parser.fileTypeCsv'), icon: 'file-excel', extensions: csvExts })
   if (mdExts.length) groups.push({ key: 'markdown', label: 'Markdown', icon: 'file-code', extensions: mdExts })
-  if (txtExts.length) groups.push({ key: 'text', label: '纯文本', icon: 'file', extensions: txtExts })
-  if (imageExts.length) groups.push({ key: 'image', label: '图片', icon: 'image', extensions: imageExts })
+  if (txtExts.length) groups.push({ key: 'text', label: t('kbSettings.parser.fileTypeText'), icon: 'file', extensions: txtExts })
+  if (imageExts.length) groups.push({ key: 'image', label: t('kbSettings.parser.fileTypeImage'), icon: 'image', extensions: imageExts })
 
   return groups
 })
@@ -275,13 +278,13 @@ watch(() => props.parserEngineRules, (v) => {
   h2 {
     font-size: 20px;
     font-weight: 600;
-    color: #333;
+    color: var(--td-text-color-primary);
     margin: 0 0 8px 0;
   }
 
   .section-description {
     font-size: 14px;
-    color: #666;
+    color: var(--td-text-color-secondary);
     margin: 0;
     line-height: 1.5;
   }
@@ -296,7 +299,7 @@ watch(() => props.parserEngineRules, (v) => {
 
 .empty-hint {
   padding: 24px 0;
-  color: #666;
+  color: var(--td-text-color-secondary);
 }
 
 .settings-group {
@@ -310,7 +313,7 @@ watch(() => props.parserEngineRules, (v) => {
   align-items: flex-start;
   justify-content: space-between;
   padding: 20px 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--td-component-stroke);
 
   &:last-child {
     border-bottom: none;
@@ -330,14 +333,14 @@ watch(() => props.parserEngineRules, (v) => {
 
   .group-icon {
     font-size: 18px;
-    color: #555;
+    color: var(--td-text-color-secondary);
     flex-shrink: 0;
   }
 
   label {
     font-size: 15px;
     font-weight: 500;
-    color: #333;
+    color: var(--td-text-color-primary);
     display: block;
     margin-bottom: 4px;
   }
@@ -353,8 +356,8 @@ watch(() => props.parserEngineRules, (v) => {
     display: inline-block;
     font-size: 12px;
     line-height: 1;
-    color: #555;
-    background: #f3f4f6;
+    color: var(--td-text-color-secondary);
+    background: var(--td-bg-color-secondarycontainer);
     padding: 3px 8px;
     border-radius: 4px;
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -362,7 +365,7 @@ watch(() => props.parserEngineRules, (v) => {
 
   .desc {
     font-size: 13px;
-    color: #666;
+    color: var(--td-text-color-secondary);
     margin: 0;
     line-height: 1.5;
   }
@@ -382,11 +385,11 @@ watch(() => props.parserEngineRules, (v) => {
   gap: 4px;
   margin-top: 8px;
   font-size: 12px;
-  color: #e37318;
+  color: var(--td-warning-color);
   line-height: 1.4;
 
   .go-settings {
-    color: #07C05F;
+    color: var(--td-brand-color);
     cursor: pointer;
     white-space: nowrap;
     text-decoration: none;
@@ -414,23 +417,23 @@ watch(() => props.parserEngineRules, (v) => {
 .engine-option-name {
   font-size: 13px;
   font-weight: 600;
-  color: #333;
+  color: var(--td-text-color-primary);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 .engine-option-desc {
   font-size: 12px;
-  color: #888;
+  color: var(--td-text-color-placeholder);
   line-height: 1.4;
 }
 
 .engine-option-reason {
   font-size: 12px;
-  color: #e34d59;
+  color: var(--td-error-color);
   line-height: 1.4;
 
   .go-settings {
-    color: #07C05F;
+    color: var(--td-brand-color);
     cursor: pointer;
     margin-left: 4px;
     font-size: 12px;

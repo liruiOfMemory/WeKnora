@@ -239,7 +239,7 @@ const navItems = computed(() => {
     items.push({ key: 'faq', icon: 'help-circle', label: t('knowledgeEditor.sidebar.faq') })
   } else {
     items.push(
-      { key: 'parser', icon: 'file-search', label: '解析引擎' },
+      { key: 'parser', icon: 'file-search', label: t('settings.parserEngine') },
       { key: 'storage', icon: 'cloud', label: t('knowledgeEditor.sidebar.storage') },
       { key: 'chunking', icon: 'file-copy', label: t('knowledgeEditor.sidebar.chunking') },
       { key: 'graph', icon: 'chart-bubble', label: t('knowledgeEditor.sidebar.graph') },
@@ -296,7 +296,10 @@ const initFormData = (type: 'document' | 'faq' = 'document') => {
       chunkSize: 512,
       chunkOverlap: 100,
       separators: ['\n\n', '\n', '。', '！', '？', ';', '；'],
-      parserEngineRules: undefined as any
+      parserEngineRules: undefined as any,
+      enableParentChild: false,
+      parentChunkSize: 4096,
+      childChunkSize: 384
     },
     storageProvider: 'local' as string,
     multimodalConfig: {
@@ -373,7 +376,10 @@ const loadKBData = async () => {
         chunkSize: kb.chunking_config?.chunk_size || 512,
         chunkOverlap: kb.chunking_config?.chunk_overlap || 100,
         separators: kb.chunking_config?.separators || ['\n\n', '\n', '。', '！', '？', ';', '；'],
-        parserEngineRules: kb.chunking_config?.parser_engine_rules || undefined
+        parserEngineRules: kb.chunking_config?.parser_engine_rules || undefined,
+        enableParentChild: kb.chunking_config?.enable_parent_child || false,
+        parentChunkSize: kb.chunking_config?.parent_chunk_size || 4096,
+        childChunkSize: kb.chunking_config?.child_chunk_size || 384
       },
       storageProvider: (kb.storage_config?.provider || 'local') as string,
       multimodalConfig: {
@@ -503,6 +509,9 @@ const buildSubmitData = () => {
       chunk_overlap: formData.value.chunkingConfig.chunkOverlap,
       separators: formData.value.chunkingConfig.separators,
       enable_multimodal: formData.value.multimodalConfig.enabled,
+      enable_parent_child: formData.value.chunkingConfig.enableParentChild,
+      parent_chunk_size: formData.value.chunkingConfig.parentChunkSize,
+      child_chunk_size: formData.value.chunkingConfig.childChunkSize,
       ...(formData.value.chunkingConfig.parserEngineRules?.length
         ? { parser_engine_rules: formData.value.chunkingConfig.parserEngineRules }
         : {})
@@ -603,7 +612,10 @@ const handleSubmit = async () => {
           chunkSize: data.chunking_config.chunk_size,
           chunkOverlap: data.chunking_config.chunk_overlap,
           separators: data.chunking_config.separators,
-          parserEngineRules: data.chunking_config.parser_engine_rules || undefined
+          parserEngineRules: data.chunking_config.parser_engine_rules || undefined,
+          enableParentChild: data.chunking_config.enable_parent_child || false,
+          parentChunkSize: data.chunking_config.parent_chunk_size || 4096,
+          childChunkSize: data.chunking_config.child_chunk_size || 384
         },
         multimodal: {
           enabled: !!data.vlm_config?.enabled
@@ -717,7 +729,7 @@ watch(
   max-width: 1100px;
   height: 85vh;
   max-height: 750px;
-  background: #fff;
+  background: var(--td-bg-color-container);
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   display: flex;
@@ -732,19 +744,19 @@ watch(
   width: 32px;
   height: 32px;
   border: none;
-  background: #f5f5f5;
+  background: var(--td-bg-color-secondarycontainer);
   border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: var(--td-text-color-secondary);
   transition: all 0.2s ease;
   z-index: 10;
 
   &:hover {
-    background: #e5e5e5;
-    color: #000;
+    background: var(--td-bg-color-secondarycontainer);
+    color: var(--td-text-color-primary);
   }
 }
 
@@ -756,8 +768,8 @@ watch(
 
 .settings-sidebar {
   width: 200px;
-  background: #fafafa;
-  border-right: 1px solid #e5e5e5;
+  background: var(--td-bg-color-settings-modal);
+  border-right: 1px solid var(--td-component-stroke);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -765,7 +777,7 @@ watch(
 
 .sidebar-header {
   padding: 24px 20px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid var(--td-component-stroke);
 }
 
 .sidebar-title {
@@ -773,7 +785,7 @@ watch(
   font-family: "PingFang SC";
   font-size: 18px;
   font-weight: 600;
-  color: #000000e6;
+  color: var(--td-text-color-primary);
 }
 
 .settings-nav {
@@ -792,15 +804,16 @@ watch(
   transition: all 0.2s ease;
   font-family: "PingFang SC";
   font-size: 14px;
-  color: #00000099;
+  color: var(--td-text-color-secondary);
 
   &:hover {
-    background: #f0f0f0;
+    background: var(--td-bg-color-secondarycontainer-hover);
+    color: var(--td-text-color-primary);
   }
 
   &.active {
-    background: #07c05f1a;
-    color: #07c05f;
+    background: var(--td-brand-color-light);
+    color: var(--td-brand-color);
     font-weight: 500;
   }
 }
@@ -849,19 +862,19 @@ watch(
     font-family: "PingFang SC";
     font-size: 16px;
     font-weight: 600;
-    color: #000000e6;
+    color: var(--td-text-color-primary);
   }
 
   .section-desc {
     margin: 0;
     font-family: "PingFang SC";
     font-size: 14px;
-    color: #00000066;
+    color: var(--td-text-color-placeholder);
     line-height: 22px;
   }
 
   .section-body {
-    background: #fff;
+    background: var(--td-bg-color-container);
   }
 }
 
@@ -879,11 +892,11 @@ watch(
   font-family: "PingFang SC";
   font-size: 14px;
   font-weight: 500;
-  color: #000000e6;
+  color: var(--td-text-color-primary);
 
   &.required::after {
     content: '*';
-    color: #FA5151;
+    color: var(--td-error-color);
     margin-left: 4px;
   }
 }
@@ -891,22 +904,22 @@ watch(
 .form-tip {
   margin-top: 6px;
   font-size: 12px;
-  color: #00000066;
+  color: var(--td-text-color-placeholder);
 }
 
 .faq-guide {
   margin-top: 20px;
   padding: 12px 16px;
   border-radius: 8px;
-  background: #f5f5f5;
-  color: #00000099;
+  background: var(--td-bg-color-secondarycontainer);
+  color: var(--td-text-color-secondary);
   font-size: 13px;
   line-height: 20px;
 }
 
 .settings-footer {
   padding: 16px 32px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--td-component-stroke);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -931,41 +944,41 @@ watch(
 // Radio-group 样式优化，符合项目主题风格
 :deep(.t-radio-group) {
   .t-radio-group--filled {
-    background: #f5f5f5;
+    background: var(--td-bg-color-secondarycontainer);
   }
   .t-radio-button {
-    border-color: #d9d9d9;
-    // color: #00000099;
+    border-color: var(--td-component-stroke);
+    // color: var(--td-text-color-placeholder);
 
     &:hover:not(.t-is-disabled) {
-      border-color: #07c05f;
-      color: #07c05f;
+      border-color: var(--td-brand-color);
+      color: var(--td-brand-color);
     }
 
     &.t-is-checked {
-      background: #07c05f;
-      border-color: #07c05f;
-      color: #fff;
+      background: var(--td-brand-color);
+      border-color: var(--td-brand-color);
+      color: var(--td-text-color-anti);
 
       &:hover:not(.t-is-disabled) {
-        background: #05a04f;
-        border-color: #05a04f;
-        color: #fff;
+        background: var(--td-brand-color-active);
+        border-color: var(--td-brand-color-active);
+        color: var(--td-text-color-anti);
       }
     }
 
     // 禁用状态样式
     &.t-is-disabled {
-      background: #f5f5f5;
-      border-color: #d9d9d9;
-      color: #00000040;
+      background: var(--td-bg-color-secondarycontainer);
+      border-color: var(--td-component-stroke);
+      color: var(--td-text-color-disabled);
       cursor: not-allowed;
       opacity: 0.6;
 
       &.t-is-checked {
-        background: #f0f0f0;
-        border-color: #d9d9d9;
-        color: #00000066;
+        background: var(--td-bg-color-secondarycontainer);
+        border-color: var(--td-component-stroke);
+        color: var(--td-text-color-placeholder);
       }
     }
   }

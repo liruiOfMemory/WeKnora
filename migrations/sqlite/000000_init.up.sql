@@ -142,6 +142,7 @@ CREATE TABLE IF NOT EXISTS messages (
     agent_steps TEXT DEFAULT NULL,
     mentioned_items TEXT DEFAULT '[]',
     is_completed BOOLEAN NOT NULL DEFAULT 0,
+    is_fallback BOOLEAN NOT NULL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     deleted_at DATETIME
@@ -249,6 +250,7 @@ CREATE TABLE IF NOT EXISTS mcp_services (
     advanced_config TEXT,
     stdio_config TEXT,
     env_vars TEXT,
+    is_builtin BOOLEAN NOT NULL DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     deleted_at DATETIME
@@ -256,6 +258,7 @@ CREATE TABLE IF NOT EXISTS mcp_services (
 
 CREATE INDEX IF NOT EXISTS idx_mcp_services_tenant_id ON mcp_services(tenant_id);
 CREATE INDEX IF NOT EXISTS idx_mcp_services_enabled ON mcp_services(enabled);
+CREATE INDEX IF NOT EXISTS idx_mcp_services_is_builtin ON mcp_services(is_builtin);
 CREATE INDEX IF NOT EXISTS idx_mcp_services_deleted_at ON mcp_services(deleted_at);
 
 CREATE TABLE IF NOT EXISTS custom_agents (

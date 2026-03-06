@@ -45,6 +45,10 @@ export function copyKnowledgeBase(data: { source_id: string; target_id?: string 
   return post(`/api/v1/knowledge-bases/copy`, data);
 }
 
+export function togglePinKnowledgeBase(id: string) {
+  return put(`/api/v1/knowledge-bases/${id}/pin`);
+}
+
 // 知识文件 API（基于具体知识库）
 // data.tag_id: 可选，指定知识所属的分类ID
 export function uploadKnowledgeFile(kbId: string, data: { file: File; tag_id?: string; [key: string]: any } = { file: new File([], '') }, onProgress?: (progressEvent: any) => void) {
@@ -96,6 +100,10 @@ export function getKnowledgeDetails(id: string, options?: { agent_id?: string })
 
 export function updateManualKnowledge(id: string, data: { title: string; content: string; status: string }) {
   return put(`/api/v1/knowledge/manual/${id}`, data);
+}
+
+export function reparseKnowledge(id: string) {
+  return post(`/api/v1/knowledge/${id}/reparse`);
 }
 
 export function delKnowledgeDetails(id: string) {
