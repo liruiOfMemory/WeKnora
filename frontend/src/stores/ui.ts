@@ -20,7 +20,7 @@ export const useUIStore = defineStore('ui', {
     manualEditorInitialContent: '',
     manualEditorInitialStatus: 'draft' as 'draft' | 'publish',
     manualEditorOnSuccess: null as null | ((payload: { kbId: string; knowledgeId: string; status: 'draft' | 'publish' }) => void),
-    sidebarCollapsed: localStorage.getItem('sidebar_collapsed') === 'true'
+    sidebarCollapsed: localStorage.getItem('sidebar_collapsed') === 'true',
   }),
 
   actions: {
@@ -43,7 +43,7 @@ export const useUIStore = defineStore('ui', {
     openKBSettings(kbId: string, initialSection?: string) {
       this.currentKBId = kbId
       this.kbEditorMode = 'edit'
-       this.kbEditorType = 'document'
+      this.kbEditorType = 'document'
       this.kbEditorInitialSection = initialSection || null
       this.showKBEditorModal = true
     },
