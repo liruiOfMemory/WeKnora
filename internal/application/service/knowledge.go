@@ -1809,10 +1809,10 @@ func (s *knowledgeService) getSummary(ctx context.Context,
 		var imageAnnotations string
 		for _, img := range allImageInfos {
 			if img.Caption != "" {
-				imageAnnotations += fmt.Sprintf("\n[图片描述: %s]", img.Caption)
+				imageAnnotations += fmt.Sprintf("\n[Image Description: %s]", img.Caption)
 			}
 			if img.OCRText != "" {
-				imageAnnotations += fmt.Sprintf("\n[图片文字: %s]", img.OCRText)
+				imageAnnotations += fmt.Sprintf("\n[Image OCR Text: %s]", img.OCRText)
 			}
 		}
 
@@ -1829,15 +1829,15 @@ func (s *knowledgeService) getSummary(ctx context.Context,
 
 	// Add knowledge metadata if available
 	if knowledge != nil {
-		metadataIntro := fmt.Sprintf("文档类型: %s\n文件名称: %s\n", knowledge.FileType, knowledge.FileName)
+		metadataIntro := fmt.Sprintf("Document Type: %s\nFile Name: %s\n", knowledge.FileType, knowledge.FileName)
 
 		// Add additional metadata if available
 		if knowledge.Type != "" {
-			metadataIntro += fmt.Sprintf("知识类型: %s\n", knowledge.Type)
+			metadataIntro += fmt.Sprintf("Knowledge Type: %s\n", knowledge.Type)
 		}
 
 		// Prepend metadata to content
-		contentWithMetadata = metadataIntro + "\n内容:\n" + contentWithMetadata
+		contentWithMetadata = metadataIntro + "\nContent:\n" + contentWithMetadata
 	}
 
 	// Generate summary using AI model
@@ -1934,6 +1934,11 @@ func (s *knowledgeService) ProcessSummaryGeneration(ctx context.Context, t *asyn
 	kb, err := s.kbService.GetKnowledgeBaseByID(ctx, payload.KnowledgeBaseID)
 	if err != nil {
 		logger.Errorf(ctx, "Failed to get knowledge base: %v", err)
+		return nil
+	}
+
+	if kb.SummaryModelID == "" {
+		logger.Warn(ctx, "Knowledge base summary model ID is empty, skipping summary generation")
 		return nil
 	}
 
@@ -2035,7 +2040,7 @@ func (s *knowledgeService) ProcessSummaryGeneration(ctx context.Context, t *asyn
 			TenantID:        knowledge.TenantID,
 			KnowledgeID:     knowledge.ID,
 			KnowledgeBaseID: knowledge.KnowledgeBaseID,
-			Content:         fmt.Sprintf("# 文档名称\n%s\n\n# 摘要\n%s", knowledge.FileName, summary),
+			Content:         fmt.Sprintf("# Document\n%s\n\n# Summary\n%s", knowledge.FileName, summary),
 			ChunkIndex:      maxChunkIndex + 1,
 			IsEnabled:       true,
 			CreatedAt:       time.Now(),
@@ -2282,12 +2287,12 @@ func (s *knowledgeService) generateQuestionsWithContext(ctx context.Context,
 	// Build context section
 	var contextSection string
 	if prevContent != "" || nextContent != "" {
-		contextSection = "## 上下文信息（仅供参考，帮助理解主要内容）\n"
+		contextSection = "## Context Information (for reference only, to help understand the main content)\n"
 		if prevContent != "" {
-			contextSection += fmt.Sprintf("【前文】%s\n", prevContent)
+			contextSection += fmt.Sprintf("[Preceding Context] %s\n", prevContent)
 		}
 		if nextContent != "" {
-			contextSection += fmt.Sprintf("【后文】%s\n", nextContent)
+			contextSection += fmt.Sprintf("[Following Context] %s\n", nextContent)
 		}
 		contextSection += "\n"
 	}
@@ -2335,32 +2340,38 @@ func (s *knowledgeService) generateQuestionsWithContext(ctx context.Context,
 }
 
 // Default prompt for question generation with context support
-const defaultQuestionGenerationPrompt = `你是一个专业的问题生成助手。你的任务是根据给定的【主要内容】生成用户可能会问的相关问题。
+const defaultQuestionGenerationPrompt = `You are a professional question generation assistant. Your task is to generate related questions that users might ask based on the given [Main Content].
 
 {{context}}
-## 主要内容（请基于此内容生成问题）
-文档名称：{{doc_name}}
-文档内容：
+## Main Content (generate questions based on this content)
+Document name: {{doc_name}}
+Document content:
 {{content}}
 
-## 核心要求
-- 生成的问题必须与【主要内容】直接相关
-- 问题中禁止使用任何代词或指代词（如"它"、"这个"、"该文档"、"本文"、"文中"、"其"等），必须用具体名称替代
-- 问题必须是完整独立的，脱离上下文也能被理解
-- 问题应该是用户在实际场景中可能会提出的自然问题
-- 问题应该多样化，覆盖内容的不同方面
-- 每个问题应该简洁明了，长度控制在30字以内
-- 生成的问题数量为 {{question_count}} 个
+## Core Requirements
+- Generated questions must be directly related to the [Main Content]
+- Questions must NOT use any pronouns or referential words (such as "it", "this", "that document", "this article", "the text", "its", etc.); use specific names instead
+- Questions must be complete and self-contained, understandable without additional context
+- Questions should be natural questions that users would likely ask in real scenarios
+- Questions should be diverse, covering different aspects of the content
+- Each question should be concise and clear, within 30 words
+- Generate {{question_count}} questions
 
-## 问题类型建议
-- 定义类：什么是...？...是什么？
-- 原因类：为什么...？...的原因是什么？
-- 方法类：如何...？怎样...？
-- 比较类：...和...有什么区别？
-- 应用类：...可以用于什么场景？
+## Suggested Question Types
+- Definition: What is...? What does... mean?
+- Reason: Why...? What is the reason for...?
+- Method: How to...? What is the way to...?
+- Comparison: What is the difference between... and...?
+- Application: What scenarios can... be used for?
 
-## 输出格式
-直接输出问题列表，每行一个问题，不要有序号或其他前缀。`
+## Output Format
+Output the question list directly, one question per line, without numbering or other prefixes.
+
+## CRITICAL: Language Rule
+- Generate questions in the SAME LANGUAGE as the source document
+- If the document is in Korean, generate questions in Korean
+- If the document is in English, generate questions in English
+- If the document is in Chinese, generate questions in Chinese`
 
 // GetKnowledgeFile retrieves the physical file associated with a knowledge entry
 func (s *knowledgeService) GetKnowledgeFile(ctx context.Context, id string) (io.ReadCloser, string, error) {
@@ -7438,7 +7449,11 @@ func (s *knowledgeService) resolveDocReader(engine, fileType string, isURL bool,
 		return docparser.NewMinerUReader(overrides)
 	case "mineru_cloud":
 		return docparser.NewMinerUCloudReader(overrides)
+	case "builtin":
+		// 明确指定使用 builtin 引擎（docreader），不使用 simple format 兜底
+		return s.documentReader
 	default:
+		// 未指定引擎时的兜底逻辑：simple format 使用 Go 原生处理，其他使用 docreader
 		if !isURL && docparser.IsSimpleFormat(fileType) {
 			return &docparser.SimpleFormatReader{}
 		}
@@ -8386,6 +8401,334 @@ func (s *knowledgeService) GetKBCloneProgress(ctx context.Context, taskID string
 		return nil, fmt.Errorf("failed to unmarshal progress: %w", err)
 	}
 	return &progress, nil
+}
+
+// ─── Knowledge Move ─────────────────────────────────────────────────────────
+
+const (
+	knowledgeMoveProgressKeyPrefix = "knowledge_move_progress:"
+	knowledgeMoveProgressTTL       = 24 * time.Hour
+)
+
+func getKnowledgeMoveProgressKey(taskID string) string {
+	return knowledgeMoveProgressKeyPrefix + taskID
+}
+
+func (s *knowledgeService) saveKnowledgeMoveProgress(ctx context.Context, progress *types.KnowledgeMoveProgress) error {
+	key := getKnowledgeMoveProgressKey(progress.TaskID)
+	data, err := json.Marshal(progress)
+	if err != nil {
+		return fmt.Errorf("failed to marshal move progress: %w", err)
+	}
+	return s.redisClient.Set(ctx, key, data, knowledgeMoveProgressTTL).Err()
+}
+
+// SaveKnowledgeMoveProgress saves the knowledge move progress to Redis (public method for handler use)
+func (s *knowledgeService) SaveKnowledgeMoveProgress(ctx context.Context, progress *types.KnowledgeMoveProgress) error {
+	return s.saveKnowledgeMoveProgress(ctx, progress)
+}
+
+// GetKnowledgeMoveProgress retrieves the progress of a knowledge move task
+func (s *knowledgeService) GetKnowledgeMoveProgress(ctx context.Context, taskID string) (*types.KnowledgeMoveProgress, error) {
+	key := getKnowledgeMoveProgressKey(taskID)
+	data, err := s.redisClient.Get(ctx, key).Bytes()
+	if err != nil {
+		if errors.Is(err, redis.Nil) {
+			return nil, werrors.NewNotFoundError("Knowledge move task not found")
+		}
+		return nil, fmt.Errorf("failed to get move progress from Redis: %w", err)
+	}
+
+	var progress types.KnowledgeMoveProgress
+	if err := json.Unmarshal(data, &progress); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal move progress: %w", err)
+	}
+	return &progress, nil
+}
+
+// ProcessKnowledgeMove handles Asynq knowledge move tasks
+func (s *knowledgeService) ProcessKnowledgeMove(ctx context.Context, t *asynq.Task) error {
+	var payload types.KnowledgeMovePayload
+	if err := json.Unmarshal(t.Payload(), &payload); err != nil {
+		return fmt.Errorf("failed to unmarshal knowledge move payload: %w", err)
+	}
+
+	// Add tenant ID to context
+	ctx = context.WithValue(ctx, types.TenantIDContextKey, payload.TenantID)
+
+	// Get tenant info and add to context
+	tenantInfo, err := s.tenantRepo.GetTenantByID(ctx, payload.TenantID)
+	if err != nil {
+		logger.Errorf(ctx, "ProcessKnowledgeMove: failed to get tenant info: %v", err)
+		return fmt.Errorf("failed to get tenant info: %w", err)
+	}
+	ctx = context.WithValue(ctx, types.TenantInfoContextKey, tenantInfo)
+
+	// Check if this is the last retry
+	retryCount, _ := asynq.GetRetryCount(ctx)
+	maxRetry, _ := asynq.GetMaxRetry(ctx)
+	isLastRetry := retryCount >= maxRetry
+
+	logger.Infof(ctx, "ProcessKnowledgeMove: task=%s, source=%s, target=%s, mode=%s, count=%d, retry=%d/%d",
+		payload.TaskID, payload.SourceKBID, payload.TargetKBID, payload.Mode, len(payload.KnowledgeIDs), retryCount, maxRetry)
+
+	// Helper function to handle errors - only mark as failed on last retry
+	handleError := func(progress *types.KnowledgeMoveProgress, err error, message string) {
+		if isLastRetry {
+			progress.Status = types.KBCloneStatusFailed
+			progress.Error = err.Error()
+			progress.Message = message
+			progress.UpdatedAt = time.Now().Unix()
+			_ = s.saveKnowledgeMoveProgress(ctx, progress)
+		}
+	}
+
+	// Update progress to processing
+	progress := &types.KnowledgeMoveProgress{
+		TaskID:     payload.TaskID,
+		SourceKBID: payload.SourceKBID,
+		TargetKBID: payload.TargetKBID,
+		Status:     types.KBCloneStatusProcessing,
+		Total:      len(payload.KnowledgeIDs),
+		Progress:   0,
+		Message:    "Starting knowledge move...",
+		UpdatedAt:  time.Now().Unix(),
+	}
+	_ = s.saveKnowledgeMoveProgress(ctx, progress)
+
+	// Get source and target knowledge bases
+	sourceKB, err := s.kbService.GetKnowledgeBaseByID(ctx, payload.SourceKBID)
+	if err != nil {
+		handleError(progress, err, "Failed to get source knowledge base")
+		return err
+	}
+	targetKB, err := s.kbService.GetKnowledgeBaseByID(ctx, payload.TargetKBID)
+	if err != nil {
+		handleError(progress, err, "Failed to get target knowledge base")
+		return err
+	}
+
+	// Validate compatibility
+	if sourceKB.Type != targetKB.Type {
+		err := fmt.Errorf("type mismatch: source=%s, target=%s", sourceKB.Type, targetKB.Type)
+		handleError(progress, err, "Source and target knowledge bases must be the same type")
+		return err
+	}
+	if sourceKB.EmbeddingModelID != targetKB.EmbeddingModelID {
+		err := fmt.Errorf("embedding model mismatch: source=%s, target=%s", sourceKB.EmbeddingModelID, targetKB.EmbeddingModelID)
+		handleError(progress, err, "Source and target must use the same embedding model")
+		return err
+	}
+
+	// Process each knowledge item
+	for i, knowledgeID := range payload.KnowledgeIDs {
+		err := s.moveOneKnowledge(ctx, knowledgeID, sourceKB, targetKB, payload.Mode)
+		if err != nil {
+			logger.Errorf(ctx, "ProcessKnowledgeMove: failed to move knowledge %s: %v", knowledgeID, err)
+			progress.Failed++
+		}
+		progress.Processed = i + 1
+		if progress.Total > 0 {
+			progress.Progress = progress.Processed * 100 / progress.Total
+		}
+		progress.Message = fmt.Sprintf("Moved %d/%d knowledge items", progress.Processed, progress.Total)
+		progress.UpdatedAt = time.Now().Unix()
+		_ = s.saveKnowledgeMoveProgress(ctx, progress)
+	}
+
+	// Mark as completed
+	if progress.Failed > 0 && progress.Failed == progress.Total {
+		progress.Status = types.KBCloneStatusFailed
+		progress.Message = fmt.Sprintf("Knowledge move failed: all %d items failed", progress.Total)
+	} else {
+		progress.Status = types.KBCloneStatusCompleted
+		progress.Message = fmt.Sprintf("Knowledge move completed: %d/%d succeeded", progress.Processed-progress.Failed, progress.Total)
+	}
+	progress.Progress = 100
+	progress.UpdatedAt = time.Now().Unix()
+	_ = s.saveKnowledgeMoveProgress(ctx, progress)
+
+	logger.Infof(ctx, "ProcessKnowledgeMove: task=%s completed, processed=%d, failed=%d", payload.TaskID, progress.Processed, progress.Failed)
+	return nil
+}
+
+// moveOneKnowledge moves a single knowledge item from source KB to target KB.
+func (s *knowledgeService) moveOneKnowledge(
+	ctx context.Context,
+	knowledgeID string,
+	sourceKB, targetKB *types.KnowledgeBase,
+	mode string,
+) error {
+	tenantID := ctx.Value(types.TenantIDContextKey).(uint64)
+
+	// Get the knowledge item
+	knowledge, err := s.repo.GetKnowledgeByID(ctx, tenantID, knowledgeID)
+	if err != nil {
+		return fmt.Errorf("failed to get knowledge %s: %w", knowledgeID, err)
+	}
+
+	// Only move completed items
+	if knowledge.ParseStatus != types.ParseStatusCompleted {
+		return fmt.Errorf("knowledge %s is not in completed status (current: %s)", knowledgeID, knowledge.ParseStatus)
+	}
+
+	// Mark as processing during move
+	knowledge.ParseStatus = types.ParseStatusProcessing
+	if err := s.repo.UpdateKnowledge(ctx, knowledge); err != nil {
+		return fmt.Errorf("failed to mark knowledge as processing: %w", err)
+	}
+
+	switch mode {
+	case "reuse_vectors":
+		return s.moveKnowledgeReuseVectors(ctx, knowledge, sourceKB, targetKB)
+	case "reparse":
+		return s.moveKnowledgeReparse(ctx, knowledge, sourceKB, targetKB)
+	default:
+		return fmt.Errorf("unknown move mode: %s", mode)
+	}
+}
+
+// moveKnowledgeReuseVectors moves knowledge by copying vector indices and updating DB references.
+func (s *knowledgeService) moveKnowledgeReuseVectors(
+	ctx context.Context,
+	knowledge *types.Knowledge,
+	sourceKB, targetKB *types.KnowledgeBase,
+) error {
+	tenantID := ctx.Value(types.TenantIDContextKey).(uint64)
+	tenantInfo := ctx.Value(types.TenantInfoContextKey).(*types.Tenant)
+
+	// 1. Get old chunk IDs for vector index copy mapping
+	oldChunks, err := s.chunkRepo.ListChunksByKnowledgeID(ctx, tenantID, knowledge.ID)
+	if err != nil {
+		return fmt.Errorf("failed to list chunks: %w", err)
+	}
+
+	// Build identity mapping (same chunk IDs, just moving between KBs)
+	chunkIDMapping := make(map[string]string, len(oldChunks))
+	for _, c := range oldChunks {
+		chunkIDMapping[c.ID] = c.ID
+	}
+
+	// 2. Copy vector indices from source KB to target KB
+	if len(chunkIDMapping) > 0 && knowledge.EmbeddingModelID != "" {
+		retrieveEngine, err := retriever.NewCompositeRetrieveEngine(s.retrieveEngine, tenantInfo.GetEffectiveEngines())
+		if err != nil {
+			return fmt.Errorf("failed to init retrieve engine: %w", err)
+		}
+		embeddingModel, err := s.modelService.GetEmbeddingModel(ctx, knowledge.EmbeddingModelID)
+		if err != nil {
+			return fmt.Errorf("failed to get embedding model: %w", err)
+		}
+
+		// Copy indices from source KB to target KB
+		knowledgeIDMapping := map[string]string{knowledge.ID: knowledge.ID}
+		if err := retrieveEngine.CopyIndices(ctx, sourceKB.ID, targetKB.ID,
+			knowledgeIDMapping, chunkIDMapping,
+			embeddingModel.GetDimensions(), sourceKB.Type,
+		); err != nil {
+			return fmt.Errorf("failed to copy indices: %w", err)
+		}
+
+		// Delete indices from source KB
+		if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, []string{knowledge.ID},
+			embeddingModel.GetDimensions(), sourceKB.Type,
+		); err != nil {
+			logger.Warnf(ctx, "moveKnowledgeReuseVectors: failed to delete old indices for knowledge %s: %v", knowledge.ID, err)
+			// Non-fatal: indices will be orphaned but won't affect correctness
+		}
+	}
+
+	// 3. Update chunks' knowledge_base_id in DB
+	if err := s.chunkRepo.MoveChunksByKnowledgeID(ctx, tenantID, knowledge.ID, targetKB.ID); err != nil {
+		return fmt.Errorf("failed to move chunks: %w", err)
+	}
+
+	// 4. Update knowledge record
+	knowledge.KnowledgeBaseID = targetKB.ID
+	knowledge.TagID = "" // Clear tag since tags are KB-scoped
+	knowledge.ParseStatus = types.ParseStatusCompleted
+	knowledge.UpdatedAt = time.Now()
+	if err := s.repo.UpdateKnowledge(ctx, knowledge); err != nil {
+		return fmt.Errorf("failed to update knowledge: %w", err)
+	}
+
+	return nil
+}
+
+// moveKnowledgeReparse moves knowledge to target KB and re-parses it with target KB's configuration.
+func (s *knowledgeService) moveKnowledgeReparse(
+	ctx context.Context,
+	knowledge *types.Knowledge,
+	_, targetKB *types.KnowledgeBase,
+) error {
+	tenantID := ctx.Value(types.TenantIDContextKey).(uint64)
+
+	// 1. Clean up existing chunks and vector indices
+	if err := s.cleanupKnowledgeResources(ctx, knowledge); err != nil {
+		logger.Warnf(ctx, "moveKnowledgeReparse: cleanup partial error for knowledge %s: %v", knowledge.ID, err)
+		// Continue - partial cleanup is acceptable
+	}
+
+	// 2. Update knowledge to belong to target KB
+	knowledge.KnowledgeBaseID = targetKB.ID
+	knowledge.EmbeddingModelID = targetKB.EmbeddingModelID
+	knowledge.TagID = "" // Clear tag since tags are KB-scoped
+	knowledge.ParseStatus = types.ParseStatusPending
+	knowledge.EnableStatus = "disabled"
+	knowledge.Description = ""
+	knowledge.ProcessedAt = nil
+	knowledge.UpdatedAt = time.Now()
+	if err := s.repo.UpdateKnowledge(ctx, knowledge); err != nil {
+		return fmt.Errorf("failed to update knowledge: %w", err)
+	}
+
+	// 3. Enqueue document processing task with target KB's configuration
+	if knowledge.IsManual() {
+		meta, err := knowledge.ManualMetadata()
+		if err != nil || meta == nil {
+			return fmt.Errorf("failed to get manual metadata for reparse: %w", err)
+		}
+		s.triggerManualProcessing(ctx, targetKB, knowledge, meta.Content, false)
+		return nil
+	}
+
+	if knowledge.FilePath != "" {
+		enableMultimodel := targetKB.IsMultimodalEnabled()
+		enableQuestionGeneration := false
+		questionCount := 3
+		if targetKB.QuestionGenerationConfig != nil && targetKB.QuestionGenerationConfig.Enabled {
+			enableQuestionGeneration = true
+			if targetKB.QuestionGenerationConfig.QuestionCount > 0 {
+				questionCount = targetKB.QuestionGenerationConfig.QuestionCount
+			}
+		}
+
+		taskPayload := types.DocumentProcessPayload{
+			TenantID:                 tenantID,
+			KnowledgeID:              knowledge.ID,
+			KnowledgeBaseID:          targetKB.ID,
+			FilePath:                 knowledge.FilePath,
+			FileName:                 knowledge.FileName,
+			FileType:                 getFileType(knowledge.FileName),
+			EnableMultimodel:         enableMultimodel,
+			EnableQuestionGeneration: enableQuestionGeneration,
+			QuestionCount:            questionCount,
+		}
+
+		payloadBytes, err := json.Marshal(taskPayload)
+		if err != nil {
+			return fmt.Errorf("failed to marshal document process payload: %w", err)
+		}
+
+		task := asynq.NewTask(types.TypeDocumentProcess, payloadBytes, asynq.Queue("default"), asynq.MaxRetry(3))
+		info, err := s.task.Enqueue(task)
+		if err != nil {
+			return fmt.Errorf("failed to enqueue document process task: %w", err)
+		}
+		logger.Infof(ctx, "moveKnowledgeReparse: enqueued reparse task id=%s for knowledge=%s", info.ID, knowledge.ID)
+	}
+
+	return nil
 }
 
 // getOrCreateTagInTarget finds or creates a tag in the target knowledge base based on the source tag.

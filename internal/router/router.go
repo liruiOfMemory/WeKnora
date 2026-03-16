@@ -59,6 +59,7 @@ type RouterParams struct {
 	CustomAgentHandler    *handler.CustomAgentHandler
 	SkillHandler          *handler.SkillHandler
 	OrganizationHandler   *handler.OrganizationHandler
+	IMHandler             *handler.IMHandler
 }
 
 // NewRouter 创建新的路由
@@ -102,6 +103,9 @@ func NewRouter(params RouterParams) *gin.Engine {
 	if handler.Edition == "lite" {
 		serveFrontendStatic(r)
 	}
+
+	// IM 回调路由（在认证中间件之前注册，使用各平台自身的签名验证）
+	RegisterIMRoutes(r, params.IMHandler)
 
 	// 认证中间件
 	r.Use(middleware.Auth(params.TenantService, params.UserService, params.Config))
@@ -199,6 +203,10 @@ func RegisterKnowledgeRoutes(r *gin.RouterGroup, handler *handler.KnowledgeHandl
 		k.PUT("/tags", handler.UpdateKnowledgeTagBatch)
 		// 搜索知识
 		k.GET("/search", handler.SearchKnowledge)
+		// 移动知识到其他知识库
+		k.POST("/move", handler.MoveKnowledge)
+		// 获取知识移动进度
+		k.GET("/move/progress/:task_id", handler.GetKnowledgeMoveProgress)
 	}
 }
 
@@ -254,6 +262,8 @@ func RegisterKnowledgeBaseRoutes(r *gin.RouterGroup, handler *handler.KnowledgeB
 		kb.POST("/copy", handler.CopyKnowledgeBase)
 		// 获取知识库复制进度
 		kb.GET("/copy/progress/:task_id", handler.GetKBCloneProgress)
+		// 获取可移动目标知识库列表
+		kb.GET("/:id/move-targets", handler.ListMoveTargets)
 	}
 }
 
@@ -276,6 +286,10 @@ func RegisterMessageRoutes(r *gin.RouterGroup, handler *handler.MessageHandler) 
 	// 消息路由组
 	messages := r.Group("/messages")
 	{
+		// 搜索历史对话（关键词 + 向量混合搜索）
+		messages.POST("/search", handler.SearchMessages)
+		// 获取聊天历史知识库的统计信息
+		messages.GET("/chat-history-stats", handler.GetChatHistoryKBStats)
 		// 加载更早的消息，用于向上滚动加载
 		messages.GET("/:session_id/load", handler.LoadMessages)
 		// 删除消息
@@ -564,6 +578,19 @@ func RegisterOrganizationRoutes(r *gin.RouterGroup, orgHandler *handler.Organiza
 	// Shared agents route
 	r.GET("/shared-agents", orgHandler.ListSharedAgents)
 	r.POST("/shared-agents/disabled", orgHandler.SetSharedAgentDisabledByMe)
+}
+
+// RegisterIMRoutes registers IM callback routes.
+// These are registered BEFORE auth middleware since IM platforms use their own signature verification.
+func RegisterIMRoutes(r *gin.Engine, imHandler *handler.IMHandler) {
+	im := r.Group("/api/v1/im")
+	{
+		// WeCom callback (supports both GET for URL verification and POST for message events)
+		im.GET("/callback/wecom", imHandler.WeComCallback)
+		im.POST("/callback/wecom", imHandler.WeComCallback)
+		// Feishu callback (POST for both URL verification challenge and message events)
+		im.POST("/callback/feishu", imHandler.FeishuCallback)
+	}
 }
 
 // serveFrontendStatic registers a middleware that serves the frontend SPA

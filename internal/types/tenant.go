@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Tencent/WeKnora/internal/utils"
 	"gorm.io/gorm"
 )
 
@@ -31,6 +32,10 @@ var retrieverEngineMapping = map[string][]RetrieverEngineParams{
 	"milvus": {
 		{RetrieverType: VectorRetrieverType, RetrieverEngineType: MilvusRetrieverEngineType},
 		{RetrieverType: KeywordsRetrieverType, RetrieverEngineType: MilvusRetrieverEngineType},
+	},
+	"weaviate": {
+		{RetrieverType: KeywordsRetrieverType, RetrieverEngineType: WeaviateRetrieverEngineType},
+		{RetrieverType: VectorRetrieverType, RetrieverEngineType: WeaviateRetrieverEngineType},
 	},
 	"sqlite": {
 		{RetrieverType: KeywordsRetrieverType, RetrieverEngineType: SQLiteRetrieverEngineType},
@@ -98,6 +103,10 @@ type Tenant struct {
 	ParserEngineConfig *ParserEngineConfig `yaml:"parser_engine_config" json:"parser_engine_config" gorm:"type:jsonb"`
 	// Storage engine config: parameters for Local, MinIO, COS. Used for document/file storage and docreader.
 	StorageEngineConfig *StorageEngineConfig `yaml:"storage_engine_config" json:"storage_engine_config" gorm:"type:jsonb"`
+	// Chat history config: knowledge base configuration for indexing and searching chat messages via vector search
+	ChatHistoryConfig *ChatHistoryConfig `yaml:"chat_history_config" json:"chat_history_config" gorm:"type:jsonb"`
+	// Retrieval config: global search/retrieval parameters shared by knowledge search and message search
+	RetrievalConfig *RetrievalConfig `yaml:"retrieval_config" json:"retrieval_config" gorm:"type:jsonb"`
 	// Creation time
 	CreatedAt time.Time `yaml:"created_at"          json:"created_at"`
 	// Last updated time
@@ -123,6 +132,28 @@ func (t *Tenant) GetEffectiveEngines() []RetrieverEngineParams {
 func (t *Tenant) BeforeCreate(tx *gorm.DB) error {
 	if t.RetrieverEngines.Engines == nil {
 		t.RetrieverEngines.Engines = []RetrieverEngineParams{}
+	}
+	return nil
+}
+
+// BeforeSave encrypts APIKey before persisting to database.
+// Uses tx.Statement.SetColumn to avoid polluting the in-memory struct.
+func (t *Tenant) BeforeSave(tx *gorm.DB) error {
+	if key := utils.GetAESKey(); key != nil && t.APIKey != "" {
+		if encrypted, err := utils.EncryptAESGCM(t.APIKey, key); err == nil {
+			tx.Statement.SetColumn("api_key", encrypted)
+		}
+	}
+	return nil
+}
+
+// AfterFind decrypts APIKey after loading from database.
+// Legacy plaintext (without enc:v1: prefix) is returned as-is.
+func (t *Tenant) AfterFind(tx *gorm.DB) error {
+	if key := utils.GetAESKey(); key != nil && t.APIKey != "" {
+		if decrypted, err := utils.DecryptAESGCM(t.APIKey, key); err == nil {
+			t.APIKey = decrypted
+		}
 	}
 	return nil
 }
@@ -290,14 +321,15 @@ func (c *ParserEngineConfig) Scan(value interface{}) error {
 	return json.Unmarshal(b, c)
 }
 
-// StorageEngineConfig holds tenant-level storage engine parameters for Local, MinIO, COS, and TOS.
+// StorageEngineConfig holds tenant-level storage engine parameters for Local, MinIO, COS, TOS, and S3.
 // Knowledge bases select which provider to use; parameters are read from here.
 type StorageEngineConfig struct {
-	DefaultProvider string             `json:"default_provider"` // "local", "minio", "cos", "tos"
+	DefaultProvider string             `json:"default_provider"` // "local", "minio", "cos", "tos", "s3"
 	Local           *LocalEngineConfig `json:"local,omitempty"`
 	MinIO           *MinIOEngineConfig `json:"minio,omitempty"`
 	COS             *COSEngineConfig   `json:"cos,omitempty"`
 	TOS             *TOSEngineConfig   `json:"tos,omitempty"`
+	S3              *S3EngineConfig    `json:"s3,omitempty"`
 }
 
 // LocalEngineConfig is for local file system storage (single-machine deployment only).
@@ -329,6 +361,16 @@ type COSEngineConfig struct {
 
 // TOSEngineConfig is for Volcengine TOS (火山引擎对象存储).
 type TOSEngineConfig struct {
+	Endpoint   string `json:"endpoint"`
+	Region     string `json:"region"`
+	AccessKey  string `json:"access_key"`
+	SecretKey  string `json:"secret_key"`
+	BucketName string `json:"bucket_name"`
+	PathPrefix string `json:"path_prefix"`
+}
+
+// S3EngineConfig is for AWS S3 and S3-compatible object storage.
+type S3EngineConfig struct {
 	Endpoint   string `json:"endpoint"`
 	Region     string `json:"region"`
 	AccessKey  string `json:"access_key"`

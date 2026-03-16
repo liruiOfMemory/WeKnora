@@ -38,8 +38,8 @@ services:
     volumes:
       - data-files:/data/files
       - docreader-tmp:/tmp/docreader:ro
-      # Optional: mount custom config file
-      # - ./config/config.yaml:/app/config/config.yaml
+      # Mount custom config file (required for IM integration)
+      - ./config/config.yaml:/app/config/config.yaml
       # Optional: mount custom skills directory (allows adding skills without rebuilding image)
       - ./skills/preloaded:/app/skills/preloaded
     healthcheck:
@@ -86,6 +86,11 @@ services:
       - MILVUS_COLLECTION=${MILVUS_COLLECTION:-weknora_embeddings}
       - DOCREADER_ADDR=${DOCREADER_ADDR:-docreader:50051}
       - DOCREADER_TRANSPORT=${DOCREADER_TRANSPORT:-grpc}
+      - WEAVIATE_HOST=${WEAVIATE_HOST:-weaviate:8080}
+      - WEAVIATE_GRPC_ADDRESS=${WEAVIATE_GRPC_ADDRESS:-weaviate:50051}
+      - WEAVIATE_SCHEME=${WEAVIATE_SCHEME:-http}
+      - WEAVIATE_AUTH_ENABLED=${WEAVIATE_AUTH_ENABLED:-false}
+      - WEAVIATE_API_KEY=${WEAVIATE_API_KEY:-}
       - STORAGE_TYPE=${STORAGE_TYPE:-}
       - LOCAL_STORAGE_BASE_DIR=${LOCAL_STORAGE_BASE_DIR:-}
       - AUTO_RECOVER_DIRTY=${AUTO_RECOVER_DIRTY:-true}
@@ -106,8 +111,14 @@ services:
       - NEO4J_USERNAME=${NEO4J_USERNAME:-neo4j}
       - NEO4J_PASSWORD=${NEO4J_PASSWORD:-password}
       - TENANT_AES_KEY=${TENANT_AES_KEY:-}
+      - SYSTEM_AES_KEY=${SYSTEM_AES_KEY:-}
       - CONCURRENCY_POOL_SIZE=${CONCURRENCY_POOL_SIZE:-5}
       - JWT_SECRET=${JWT_SECRET:-}
+      # IM integration
+      - FEISHU_APP_ID=${FEISHU_APP_ID:-}
+      - FEISHU_APP_SECRET=${FEISHU_APP_SECRET:-}
+      - WECOM_BOT_ID=${WECOM_BOT_ID:-}
+      - WECOM_BOT_SECRET=${WECOM_BOT_SECRET:-}
       # File size limit (in MB)
       - MAX_FILE_SIZE_MB=${MAX_FILE_SIZE_MB:-50}
       # Agent Skills Sandbox
@@ -309,6 +320,29 @@ services:
     profiles:
       - milvus
 
+  weaviate:
+    image: semitechnologies/weaviate:1.28.4
+    container_name: WeKnora-weaviate
+    environment:
+      - PERSISTENCE_DATA_PATH=/var/lib/weaviate
+      - CLUSTER_HOSTNAME=node1
+      - DEFAULT_VECTORIZER_MODULE=none
+      - ENABLE_MODULES=none
+      - AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED=true
+      - CLUSTER_GOSSIP_BIND_PORT=7000
+      - CLUSTER_DATA_BIND_PORT=7001
+      - RAFT_BOOTSTRAP_EXPECT=1
+    ports:
+      - "9035:8080"
+      - "50052:50051"
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    networks:
+      - WeKnora-network
+    restart: unless-stopped
+    profiles:
+      - weaviate
+
 networks:
   WeKnora-network:
     driver: bridge
@@ -322,3 +356,4 @@ volumes:
   neo4j-data:
   qdrant_data:
   milvus_data:
+  weaviate_data:
