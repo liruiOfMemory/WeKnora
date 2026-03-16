@@ -103,7 +103,7 @@
 
 
         <!-- 下半部分：用户菜单 -->
-        <div class="menu_bottom 111" v-show="!hideUser">
+        <div class="menu_bottom" v-show="!hideUser">
             <UserMenu />
         </div>
 
@@ -247,14 +247,12 @@
         // 前端控制一些隐藏
         if (hideUser.value) {
             return (menuArr.value as unknown as MenuItem[]).filter((item: MenuItem) => item.path === 'creatChat');
-        } else {
-            return (menuArr.value as unknown as MenuItem[]).filter((item: MenuItem) =>
+        }
+         return (menuArr.value as unknown as MenuItem[]).filter((item: MenuItem) =>
                 item.path === 'knowledge-bases' || item.path === 'knowledge-search' || item.path === 'agents' || item.path === 'organizations' || item.path === 'creatChat'
             );
-        }
 
     });
-    console.log("页签", topMenuItems);
     const bottomMenuItems = computed<MenuItem[]>(() => {
         return (menuArr.value as unknown as MenuItem[]).filter((item: MenuItem) => {
             if (item.path === 'knowledge-bases' || item.path === 'knowledge-search' || item.path === 'agents' || item.path === 'organizations' || item.path === 'creatChat') {
