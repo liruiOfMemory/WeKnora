@@ -1071,27 +1071,27 @@ func (s *knowledgeService) DeleteKnowledge(ctx context.Context, id string) error
 
 	wg := errgroup.Group{}
 	// Delete knowledge embeddings from vector store
-	wg.Go(func() error {
-		tenantInfo := ctx.Value(types.TenantInfoContextKey).(*types.Tenant)
-		retrieveEngine, err := retriever.NewCompositeRetrieveEngine(
-			s.retrieveEngine,
-			tenantInfo.GetEffectiveEngines(),
-		)
-		if err != nil {
-			logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
-			return err
-		}
-		embeddingModel, err := s.modelService.GetEmbeddingModel(ctx, knowledge.EmbeddingModelID)
-		if err != nil {
-			logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
-			return err
-		}
-		if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, []string{knowledge.ID}, embeddingModel.GetDimensions(), knowledge.Type); err != nil {
-			logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
-			return err
-		}
-		return nil
-	})
+	// wg.Go(func() error {
+	// 	tenantInfo := ctx.Value(types.TenantInfoContextKey).(*types.Tenant)
+	// 	retrieveEngine, err := retriever.NewCompositeRetrieveEngine(
+	// 		s.retrieveEngine,
+	// 		tenantInfo.GetEffectiveEngines(),
+	// 	)
+	// 	if err != nil {
+	// 		logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
+	// 		return err
+	// 	}
+	// 	embeddingModel, err := s.modelService.GetEmbeddingModel(ctx, knowledge.EmbeddingModelID)
+	// 	if err != nil {
+	// 		logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
+	// 		return err
+	// 	}
+	// 	if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, []string{knowledge.ID}, embeddingModel.GetDimensions(), knowledge.Type); err != nil {
+	// 		logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
+	// 		return err
+	// 	}
+	// 	return nil
+	// })
 
 	// Delete all chunks associated with this knowledge
 	wg.Go(func() error {
@@ -1169,7 +1169,9 @@ func (s *knowledgeService) DeleteKnowledgeList(ctx context.Context, ids []string
 
 	wg := errgroup.Group{}
 	// 2. Delete knowledge embeddings from vector store
+	// logger.Infof(ctx, "开始执行组2")
 	wg.Go(func() error {
+		logger.Infof(ctx, "开始执行组2")
 		tenantInfo := ctx.Value(types.TenantInfoContextKey).(*types.Tenant)
 		retrieveEngine, err := retriever.NewCompositeRetrieveEngine(
 			s.retrieveEngine,
@@ -1177,7 +1179,7 @@ func (s *knowledgeService) DeleteKnowledgeList(ctx context.Context, ids []string
 		)
 		if err != nil {
 			logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge delete knowledge embedding failed")
-			return err
+			return nil
 		}
 		// Group by EmbeddingModelID and Type
 		type groupKey struct {
@@ -1193,13 +1195,13 @@ func (s *knowledgeService) DeleteKnowledgeList(ctx context.Context, ids []string
 			embeddingModel, err := s.modelService.GetEmbeddingModel(ctx, key.EmbeddingModelID)
 			if err != nil {
 				logger.GetLogger(ctx).WithField("error", err).Errorf("DeleteKnowledge get embedding model failed")
-				return err
+				return nil
 			}
 			if err := retrieveEngine.DeleteByKnowledgeIDList(ctx, knowledgeIDs, embeddingModel.GetDimensions(), key.Type); err != nil {
 				logger.GetLogger(ctx).
 					WithField("error", err).
 					Errorf("DeleteKnowledge delete knowledge embedding failed")
-				return err
+				return nil
 			}
 		}
 		return nil

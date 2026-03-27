@@ -153,20 +153,20 @@
         <line class="connection-line line-2" x1="35" y1="25" x2="55" y2="20" />
         <line class="connection-line line-3" x1="55" y1="20" x2="65" y2="15" />
         <line class="connection-line line-4" x1="65" y1="15" x2="85" y2="12" />
-        
+
         <!-- Middle layer connections -->
         <line class="connection-line line-5" x1="8" y1="35" x2="25" y2="45" />
         <line class="connection-line line-6" x1="25" y1="45" x2="45" y2="50" />
         <line class="connection-line line-7" x1="45" y1="50" x2="65" y2="48" />
         <line class="connection-line line-8" x1="65" y1="48" x2="72" y2="42" />
         <line class="connection-line line-9" x1="72" y1="42" x2="90" y2="38" />
-        
+
         <!-- Lower connections -->
         <line class="connection-line line-10" x1="10" y1="55" x2="20" y2="60" />
         <line class="connection-line line-11" x1="20" y1="60" x2="40" y2="70" />
         <line class="connection-line line-12" x1="40" y1="70" x2="60" y2="75" />
         <line class="connection-line line-13" x1="60" y1="75" x2="75" y2="80" />
-        
+
         <!-- Vertical connections -->
         <line class="connection-line line-14" x1="20" y1="15" x2="20" y2="60" />
         <line class="connection-line line-15" x1="35" y1="25" x2="25" y2="45" />
@@ -179,28 +179,29 @@
     </div>
 
     <!-- Logo - Top Left -->
-    <a href="https://github.com/Tencent/WeKnora" target="_blank" class="header-logo" :title="$t('common.github')">
-      <img src="@/assets/img/weknora.png" alt="WeKnora" class="logo-image" />
-    </a>
+     <a href="" target="_blank" class="header-logo" :title="$t('common.github')" style="text-decoration: none">
+        <h1>小云智问</h1>
+     </a>
+
 
     <!-- Header Links - Top Right -->
     <div class="header-links">
-      <a href="https://weknora.weixin.qq.com" target="_blank" class="header-link" :title="$t('common.website')">
+      <!-- <a href="https://weknora.weixin.qq.com" target="_blank" class="header-link" :title="$t('common.website')">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
           <circle cx="12" cy="12" r="10"/>
           <line x1="2" y1="12" x2="22" y2="12"/>
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
         <span class="link-text">{{ $t('common.website') }}</span>
-      </a>
-      
-      <a href="https://github.com/Tencent/WeKnora" target="_blank" class="header-link" :title="$t('common.info')">
+      </a> -->
+
+      <!-- <a href="https://github.com/Tencent/WeKnora" target="_blank" class="header-link" :title="$t('common.info')">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
         </svg>
         <span class="link-text">GitHub</span>
-      </a>
-      
+      </a> -->
+
       <div class="language-switch">
         <button @click="toggleLanguageMenu" class="header-link" :title="languageOptions.find(l => l.value === currentLanguage)?.label">
           <span class="lang-flag-icon">{{ languageOptions.find(l => l.value === currentLanguage)?.flag }}</span>
@@ -209,11 +210,11 @@
             <polyline points="6 9 12 15 18 9"/>
           </svg>
         </button>
-        
+
         <!-- Language Dropdown -->
         <div v-if="showLanguageMenu" class="language-dropdown">
-          <div 
-            v-for="lang in languageOptions" 
+          <div
+            v-for="lang in languageOptions"
             :key="lang.value"
             @click="selectLanguage(lang.value)"
             class="language-option"
@@ -536,10 +537,10 @@ const registerRules = computed(() => ({
     { required: true, message: t('auth.usernameRequired'), type: 'error' },
     { min: 2, message: t('auth.usernameMinLength'), type: 'error' },
     { max: 20, message: t('auth.usernameMaxLength'), type: 'error' },
-    { 
-      pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/, 
-      message: t('auth.usernameInvalid'), 
-      type: 'error' 
+    {
+      pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
+      message: t('auth.usernameInvalid'),
+      type: 'error'
     }
   ],
   email: [
@@ -566,7 +567,7 @@ const registerRules = computed(() => ({
 // Toggle login/register mode
 const toggleMode = () => {
   isRegisterMode.value = !isRegisterMode.value
-  
+
   Object.keys(registerData).forEach(key => {
     (registerData as any)[key] = ''
   })
@@ -611,7 +612,7 @@ const handleLogin = async () => {
     if (valid !== true) return
 
     loading.value = true
-    
+
     const response = await login({
       email: formData.email,
       password: formData.password,
@@ -643,7 +644,7 @@ const handleLogin = async () => {
             updated_at: response.tenant.updated_at || new Date().toISOString()
           })
         }
-      
+
       MessagePlugin.success(t('auth.loginSuccess'))
 
       // Wait for state update before redirect
@@ -667,7 +668,7 @@ const handleRegister = async () => {
     if (valid !== true) return
 
     loading.value = true
-    
+
     const response = await register({
       username: registerData.username,
       email: registerData.email,
@@ -676,11 +677,11 @@ const handleRegister = async () => {
 
     if (response.success) {
       MessagePlugin.success(t('auth.registerSuccess'))
-      
+
       // Switch to login mode and fill in email
       isRegisterMode.value = false
       formData.email = registerData.email
-      
+
       // Clear register form
       Object.keys(registerData).forEach(key => {
         (registerData as any)[key] = ''
@@ -749,7 +750,7 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(4px);
   border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 
+  box-shadow:
     0 0 15px rgba(255, 255, 255, 0.4),
     0 0 30px rgba(16, 185, 129, 0.3),
     inset 0 0 15px rgba(255, 255, 255, 0.1);
@@ -762,7 +763,7 @@ onMounted(() => {
 
 .knowledge-node:hover {
   transform: scale(1.2);
-  box-shadow: 
+  box-shadow:
     0 0 20px rgba(255, 255, 255, 0.6),
     0 0 40px rgba(16, 185, 129, 0.5),
     inset 0 0 20px rgba(255, 255, 255, 0.2);
@@ -1155,7 +1156,7 @@ onMounted(() => {
     border-color: rgba(255, 255, 255, 0.4);
     color: var(--td-text-color-anti);
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(0, 0, 0, 0.15),
       0 0 0 1px rgba(255, 255, 255, 0.2);
 
@@ -1189,7 +1190,7 @@ onMounted(() => {
       background: rgba(255, 255, 255, 0.3);
       border-color: rgba(255, 255, 255, 0.4);
       color: var(--td-text-color-anti);
-      box-shadow: 
+      box-shadow:
         0 4px 16px rgba(0, 0, 0, 0.15),
         0 0 0 1px rgba(255, 255, 255, 0.2);
     }
@@ -1324,16 +1325,16 @@ onMounted(() => {
     border-radius: 8px;
     background: var(--td-bg-color-container);
     transition: all 0.2s;
-    
+
     &:focus-within {
       border-color: var(--td-brand-color);
       box-shadow: 0 0 0 3px rgba(7, 192, 95, 0.1);
     }
-    
+
     &:hover {
       border-color: var(--td-brand-color);
     }
-    
+
     .t-input__inner {
       border: none !important;
       box-shadow: none !important;
@@ -1341,14 +1342,14 @@ onMounted(() => {
       background: transparent;
       font-size: 15px;
       font-family: "PingFang SC", sans-serif;
-      
+
       &:focus {
         border: none !important;
         box-shadow: none !important;
         outline: none !important;
       }
     }
-    
+
     .t-input__wrap {
       border: none !important;
       box-shadow: none !important;
@@ -1357,12 +1358,12 @@ onMounted(() => {
 
   :deep(.t-form-item) {
     margin-bottom: 18px;
-    
+
     &:last-child {
       margin-bottom: 0;
     }
   }
-  
+
   :deep(.t-form-item__control) {
     width: 100%;
   }

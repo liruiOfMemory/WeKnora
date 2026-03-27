@@ -5,7 +5,7 @@ WORKDIR /app
 
 # 通过构建参数接收敏感信息
 ARG GOPRIVATE_ARG
-ARG GOPROXY_ARG
+ARG GOPROXY_ARG="https://goproxy.cn,direct"
 ARG GOSUMDB_ARG=off
 ARG APK_MIRROR_ARG
 

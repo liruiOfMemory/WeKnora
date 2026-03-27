@@ -950,7 +950,7 @@ export default {
     reset: "重置",
     clear: "清空",
     website: "官方网站",
-    github: 'GitHub',
+    github: '',
     on: "开启",
     off: "关闭",
     resetToDefault: "恢复默认",
@@ -1761,7 +1761,7 @@ export default {
     },
   },
   createChat: {
-    title: "基于知识库内容问答 - AI 问答",
+    title: "基于知识库内容问答",
     newSessionTitle: "新会话",
     messages: {
       selectKnowledgeBase: "请先选择知识库",

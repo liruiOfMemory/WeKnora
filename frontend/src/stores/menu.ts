@@ -39,7 +39,11 @@ export const useMenuStore = defineStore('menuStore', () => {
   const firstModelId = ref('')
   const firstImageFiles = ref<any[]>([])
   const prefillQuery = ref('')
-
+  let hideUi = ref<boolean>(localStorage.getItem('hide_ui') === 'true')
+  const updateHide = (val: boolean) => {
+      hideUi.value = val;
+      localStorage.setItem('hide_ui', String(val));
+  }
   const applyMenuTranslations = () => {
     menuArr.forEach(item => {
       if (item.titleKey) {
@@ -131,6 +135,8 @@ export const useMenuStore = defineStore('menuStore', () => {
     changeIsFirstSession,
     changeFirstQuery,
     setPrefillQuery,
-    consumePrefillQuery
+    consumePrefillQuery,
+    updateHide,
+    hideUi
   }
 })

@@ -1,15 +1,31 @@
 <template>
     <div class="dialogue-wrap">
         <div class="dialogue-answers">
-            <div class="dialogue-title">
+            <!-- <div class="dialogue-title">
                 <span>{{ $t('createChat.title') }}</span>
+            </div> -->
+            <div class="ai-title-container">
+                <div class="decorative-circle floating"></div>
+                <div class="decorative-circle-2 floating" style="animation-delay: -4s;"></div>
+
+                <div class="title-content">
+                    <h1 class="main-title fade-in-up">智析数据 · 洞见未来</h1>
+                    <br/>
+                    <p class="subtitle fade-in-up" style="animation-delay: 0.2s;">AI数据智能分析平台</p>
+
+                    <div class="tagline fade-in-up" style="animation-delay: 0.4s;">
+                        基于<span class="highlight">大数据分析</span>与<span class="highlight">人工智能算法</span>，
+                        深度解析数据趋势，提供精准决策支持与未来洞察，
+                        构建智能化管理体系。
+                    </div>
+                </div>
             </div>
             <InputField @send-msg="sendMsg"></InputField>
         </div>
     </div>
-    
+
     <!-- 知识库编辑器（创建/编辑统一组件） -->
-    <KnowledgeBaseEditorModal 
+    <KnowledgeBaseEditorModal
       :visible="uiStore.showKBEditorModal"
       :mode="uiStore.kbEditorMode"
       :kb-id="uiStore.currentKBId || undefined"
@@ -49,7 +65,7 @@ async function createNewSession(value: string, modelId: string, mentionedItems: 
 
     // 构建 session 数据，包含 Agent 配置
     const sessionData: any = {};
-    
+
     // 添加 Agent 配置（知识库信息在 agent_config 中）
     sessionData.agent_config = {
         enabled: true,
@@ -76,11 +92,11 @@ async function createNewSession(value: string, modelId: string, mentionedItems: 
 
 const navigateToSession = async (sessionId: string, value: string, modelId: string, mentionedItems: any[], imageFiles: any[] = []) => {
     const now = new Date().toISOString();
-    let obj = { 
-        title: t('createChat.newSessionTitle'), 
-        path: `chat/${sessionId}`, 
-        id: sessionId, 
-        isMore: false, 
+    let obj = {
+        title: t('createChat.newSessionTitle'),
+        path: `chat/${sessionId}`,
+        id: sessionId,
+        isMore: false,
         isNoTitle: true,
         created_at: now,
         updated_at: now
@@ -196,5 +212,242 @@ const handleKBEditorSuccess = (kbId: string) => {
         margin-top: 4px !important;
 
     }
+}
+</style>
+<style lang="less">
+.ai-title-container {
+    text-align: center;
+    padding: 60px 80px;
+    /* 移除白色背景，使用透明背景 */
+    background: transparent;
+    border-radius: 24px;
+    /* 移除边框和内阴影 */
+    box-shadow: none;
+    position: relative;
+    border: none;
+    max-width: 800px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.ai-title-container:hover {
+    transform: translateY(-5px);
+    /* 移除悬停时的阴影 */
+    box-shadow: none;
+}
+
+.decorative-circle {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, rgba(42, 109, 255, 0.08) 0%, rgba(0, 198, 255, 0.08) 100%);
+    border-radius: 50%;
+    top: 0px;
+    left: -50px;
+    z-index: 0;
+}
+
+.decorative-circle-2 {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(42, 109, 255, 0.05) 0%, rgba(0, 198, 255, 0.05) 100%);
+    border-radius: 50%;
+    bottom: -40px;
+    right: -40px;
+    z-index: 0;
+}
+
+.title-content {
+    position: relative;
+    z-index: 1;
+}
+
+.main-title {
+    font-size: 3rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #2A6DFF 0%, #00C6FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 1.2px;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 15px rgba(42, 109, 255, 0.15);
+    position: relative;
+    display: inline-block;
+    padding: 0 15px;
+}
+
+.main-title::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 15%;
+    width: 70%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #2A6DFF, transparent);
+    border-radius: 2px;
+}
+
+.subtitle {
+    font-size: 1.3rem;
+    color: #555;
+    font-weight: 400;
+    margin-bottom: 40px;
+    letter-spacing: 0.8px;
+    position: relative;
+    display: inline-block;
+    padding: 0 20px;
+}
+
+.subtitle::before,
+.subtitle::after {
+    content: '✦';
+    position: absolute;
+    color: #2A6DFF;
+    opacity: 0.6;
+    font-size: 0.8em;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.subtitle::before {
+    left: 0;
+}
+
+.subtitle::after {
+    right: 0;
+}
+
+.tagline {
+    font-size: 1.1rem;
+    color: #666;
+    font-style: normal;
+    line-height: 1.8;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px 40px;
+    background: linear-gradient(to right, rgba(42, 109, 255, 0.03), rgba(0, 198, 255, 0.03));
+    border-radius: 16px;
+    border: 1px solid rgba(42, 109, 255, 0.08);
+    position: relative;
+}
+
+.tagline::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    background: linear-gradient(45deg, transparent, rgba(42, 109, 255, 0.05), transparent);
+    border-radius: 16px;
+    z-index: -1;
+}
+
+.highlight {
+    color: #2A6DFF;
+    font-weight: 500;
+    position: relative;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, #2A6DFF, #00C6FF);
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.highlight:hover::after {
+    opacity: 0.6;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .ai-title-container {
+        padding: 40px 30px;
+        margin: 20px;
+    }
+
+    .main-title {
+        font-size: 2.2rem;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+    }
+
+    .tagline {
+        font-size: 1rem;
+        padding: 25px 30px;
+    }
+
+    .decorative-circle {
+        width: 100px;
+        height: 100px;
+        top: -30px;
+        left: -30px;
+    }
+
+    .decorative-circle-2 {
+        width: 70px;
+        height: 70px;
+        bottom: -25px;
+        right: -25px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-title {
+        font-size: 1.8rem;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+    }
+
+    .tagline {
+        font-size: 0.95rem;
+        padding: 20px 25px;
+    }
+}
+
+/* 动画效果 */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(180deg);
+    }
+}
+
+.floating {
+    animation: float 8s ease-in-out infinite;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out;
 }
 </style>

@@ -3,7 +3,8 @@
         <!-- 展开时：Logo + 折叠按钮同行 -->
         <div class="logo_row" v-if="!uiStore.sidebarCollapsed">
             <div class="logo_box" @click="router.push('/platform/knowledge-bases')" style="cursor: pointer;">
-                <img class="logo" src="@/assets/img/weknora.png" alt="">
+                <!-- <img class="logo" src="@/assets/img/weknora.png" alt=""  v-show="!usemenuStore.hideUi"> -->
+                <h2>小云智问</h2>
             </div>
             <div class="sidebar-toggle"
                  @click="uiStore.toggleSidebar"
@@ -30,7 +31,7 @@
                 </div>
             </div>
         </t-tooltip>
-        
+
         <!-- 租户选择器：仅在用户可切换租户时显示 -->
         <TenantSelector v-if="canAccessAllTenants && !uiStore.sidebarCollapsed" />
 
@@ -38,7 +39,7 @@
         <div v-if="uiStore.sidebarCollapsed"
              class="sidebar-drag-handle"
              @mousedown="onDragHandleMouseDown" />
-        
+
         <!-- 上半部分：知识库和对话 -->
         <div class="menu_top">
             <div class="menu_box" :class="{ 'has-submenu': item.children }" v-for="(item, index) in topMenuItems" :key="index">
@@ -77,7 +78,7 @@
                                     {{ subitem.title }}
                                 </span>
                                 <t-dropdown v-if="!batchMode"
-                                    :options="[{ content: t('menu.clearMessages'), value: 'clearMessages', prefixIcon: () => h(TIcon, { name: 'clear', size: '16px' }) }, { content: t('menu.batchManage'), value: 'batchManage', prefixIcon: () => h(TIcon, { name: 'queue', size: '16px' }) }, { content: t('upload.deleteRecord'), value: 'delete', theme: 'error', prefixIcon: () => h(TIcon, { name: 'delete', size: '16px' }) }]"
+                                    :options="[{ content: t('upload.deleteRecord'), value: 'delete' }, { content: t('menu.batchManage'), value: 'batchManage' }]"
                                     @click="handleSessionMenuClick($event, subitem.originalIndex, subitem)"
                                     placement="bottom-right"
                                     trigger="click">
@@ -112,10 +113,10 @@
                 </div>
             </div>
         </div>
-        
-        
+
+
         <!-- 下半部分：用户菜单 -->
-        <div class="menu_bottom">
+        <div class="menu_bottom" v-show="!usemenuStore.hideUi">
             <UserMenu />
         </div>
 
@@ -124,16 +125,16 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia';
-import { onMounted, watch, computed, ref, h } from 'vue';
+import { onMounted, watch, computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getSessionsList, delSession, batchDelSessions, deleteAllSessions, clearSessionMessages } from "@/api/chat/index";
+import { getSessionsList, delSession, batchDelSessions, deleteAllSessions } from "@/api/chat/index";
 import { getKnowledgeBaseById } from '@/api/knowledge-base';
 import { logout as logoutApi } from '@/api/auth';
 import { useMenuStore } from '@/stores/menu';
 import { useAuthStore } from '@/stores/auth';
 import { useOrganizationStore } from '@/stores/organization';
 import { useUIStore } from '@/stores/ui';
-import { MessagePlugin, DialogPlugin, Icon as TIcon } from "tdesign-vue-next";
+import { MessagePlugin, DialogPlugin } from "tdesign-vue-next";
 import UserMenu from '@/components/UserMenu.vue';
 import TenantSelector from '@/components/TenantSelector.vue';
 import { useI18n } from 'vue-i18n';
@@ -186,8 +187,8 @@ const canAccessAllTenants = computed(() => authStore.canAccessAllTenants);
 
 // 是否处于知识库详情页（不包括全局聊天）
 const isInKnowledgeBase = computed<boolean>(() => {
-    return route.name === 'knowledgeBaseDetail' || 
-           route.name === 'kbCreatChat' || 
+    return route.name === 'knowledgeBaseDetail' ||
+           route.name === 'kbCreatChat' ||
            route.name === 'knowledgeBaseSettings';
 });
 
@@ -213,11 +214,11 @@ const isInOrganizationList = computed<boolean>(() => route.name === 'organizatio
 // 统一的菜单项激活状态判断
 const isMenuItemActive = (itemPath: string): boolean => {
     const currentRoute = route.name;
-    
+
     switch (itemPath) {
         case 'knowledge-bases':
-            return currentRoute === 'knowledgeBaseList' || 
-                   currentRoute === 'knowledgeBaseDetail' || 
+            return currentRoute === 'knowledgeBaseList' ||
+                   currentRoute === 'knowledgeBaseDetail' ||
                    currentRoute === 'knowledgeBaseSettings';
         case 'knowledge-search':
             return currentRoute === 'knowledgeSearch';
@@ -237,11 +238,11 @@ const isMenuItemActive = (itemPath: string): boolean => {
 // 统一的图标激活状态判断
 const getIconActiveState = (itemPath: string) => {
     const currentRoute = route.name;
-    
+
     return {
         isKbActive: itemPath === 'knowledge-bases' && (
-            currentRoute === 'knowledgeBaseList' || 
-            currentRoute === 'knowledgeBaseDetail' || 
+            currentRoute === 'knowledgeBaseList' ||
+            currentRoute === 'knowledgeBaseDetail' ||
             currentRoute === 'knowledgeBaseSettings'
         ),
         isCreatChatActive: itemPath === 'creatChat' && (currentRoute === 'kbCreatChat' || currentRoute === 'globalCreatChat'),
@@ -249,12 +250,32 @@ const getIconActiveState = (itemPath: string) => {
         isChatActive: itemPath === 'chat' && currentRoute === 'chat'
     };
 };
+// 通过参数去隐藏一些东西
+watch(() => route.query, (newvalue, oldvalue) => {
+    if (newvalue.hide !=null && (newvalue.hide ==="true" || newvalue.hide ==="1") ) {
+      usemenuStore.updateHide(true)
+    }
+    if (newvalue.hide != null && (newvalue.hide === "false" || newvalue.hide === "0")) {
+      usemenuStore.updateHide(false)
+    }
+    if (newvalue.hide == null) {
+       console.log(usemenuStore.hideUi,"之前的值")
+    }
 
+
+},{deep:true,immediate: true})
+const hideUser = ref(false)
 // 分离上下两部分菜单
 const topMenuItems = computed<MenuItem[]>(() => {
-    return (menuArr.value as unknown as MenuItem[]).filter((item: MenuItem) => 
-        item.path === 'knowledge-bases' || item.path === 'knowledge-search' || item.path === 'agents' || item.path === 'organizations' || item.path === 'creatChat'
-    );
+  // 前端控制一些隐藏
+    if (usemenuStore.hideUi) {
+           return (menuArr.value as unknown as MenuItem[]).filter((item: MenuItem) => item.path === 'creatChat');
+    }else {
+      return (menuArr.value as unknown as MenuItem[]).filter((item: MenuItem) =>
+          item.path === 'knowledge-bases' || item.path === 'knowledge-search' || item.path === 'agents' || item.path === 'organizations' || item.path === 'creatChat'
+      );
+    }
+
 });
 
 const bottomMenuItems = computed<MenuItem[]>(() => {
@@ -273,7 +294,7 @@ const currentKbInfo = ref<any>(null)
 // 时间分组函数
 const getTimeCategory = (dateStr: string): string => {
     if (!dateStr) return t('time.earlier');
-    
+
     const date = new Date(dateStr);
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -281,9 +302,9 @@ const getTimeCategory = (dateStr: string): string => {
     const sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
     const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
     const oneYearAgo = new Date(today.getTime() - 365 * 24 * 60 * 60 * 1000);
-    
+
     const sessionDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    
+
     if (sessionDate.getTime() >= today.getTime()) {
         return t('time.today');
     } else if (sessionDate.getTime() >= yesterday.getTime()) {
@@ -305,7 +326,7 @@ const groupedSessions = computed(() => {
     if (!chatMenu || !chatMenu.children || chatMenu.children.length === 0) {
         return [];
     }
-    
+
     const groups: { [key: string]: any[] } = {
         [t('time.today')]: [],
         [t('time.yesterday')]: [],
@@ -314,7 +335,7 @@ const groupedSessions = computed(() => {
         [t('time.lastYear')]: [],
         [t('time.earlier')]: []
     };
-    
+
     // 将sessions按时间分组
     (chatMenu.children as any[]).forEach((session: any, index: number) => {
         const category = getTimeCategory(session.updated_at || session.created_at);
@@ -323,7 +344,7 @@ const groupedSessions = computed(() => {
             originalIndex: index
         });
     });
-    
+
     // 按顺序返回非空分组
     const orderedLabels = [t('time.today'), t('time.yesterday'), t('time.last7Days'), t('time.last30Days'), t('time.lastYear'), t('time.earlier')];
     return orderedLabels
@@ -423,26 +444,9 @@ const handleInlineBatchDelete = () => {
 const handleSessionMenuClick = (data: { value: string }, index: number, item: any) => {
     if (data?.value === 'delete') {
         delCard(index, item);
-    } else if (data?.value === 'clearMessages') {
-        clearMessages(item);
     } else if (data?.value === 'batchManage') {
         enterBatchMode()
     }
-};
-
-const clearMessages = (item: any) => {
-    clearSessionMessages(item.id).then((res: any) => {
-        if (res && res.success) {
-            MessagePlugin.success(t('menu.clearMessagesSuccess'));
-            if (item.id === route.params.chatid) {
-                window.dispatchEvent(new CustomEvent('session-messages-cleared', { detail: { sessionId: item.id } }));
-            }
-        } else {
-            MessagePlugin.error(t('menu.clearMessagesFailed'));
-        }
-    }).catch(() => {
-        MessagePlugin.error(t('menu.clearMessagesFailed'));
-    });
 };
 
 const delCard = (index: number, item: any) => {
@@ -450,17 +454,17 @@ const delCard = (index: number, item: any) => {
         if (res && (res as any).success) {
             // 找到 'creatChat' 菜单项
             const chatMenuItem = (menuArr.value as any[]).find((m: any) => m.path === 'creatChat');
-            
+
             if (chatMenuItem && chatMenuItem.children) {
                 const children = chatMenuItem.children;
                 // 通过ID查找索引，比依赖传入的index更安全
                 const actualIndex = children.findIndex((s: any) => s.id === item.id);
-                
+
                 if (actualIndex !== -1) {
                     children.splice(actualIndex, 1);
                 }
             }
-            
+
             if (item.id == route.params.chatid) {
                 // 删除当前会话后，跳转到全局创建聊天页面
                 router.push('/platform/creatChat');
@@ -470,7 +474,7 @@ const delCard = (index: number, item: any) => {
                 total.value--;
             }
         } else {
-            MessagePlugin.error(t('chat.deleteSessionFailed'));
+            MessagePlugin.error("删除失败，请稍后再试!");
         }
     })
 }
@@ -490,7 +494,7 @@ const checkScrollBottom = () => {
 
     const { scrollTop, scrollHeight, clientHeight } = container[0]
     const isBottom = scrollHeight - (scrollTop + clientHeight) < 100 // 触底阈值
-    
+
     if (isBottom && hasMore.value && !loading.value) {
         currentPage.value++;
         getMessageList(true);
@@ -500,22 +504,22 @@ const handleScroll = debounce(checkScrollBottom, 200)
 const getMessageList = async (isLoadMore = false) => {
     if (loading.value) return Promise.resolve();
     loading.value = true;
-    
+
     // 只有在首次加载或路由变化时才清空数组，滚动加载时不清空
     if (!isLoadMore) {
         currentPage.value = 1; // 重置页码
         usemenuStore.clearMenuArr();
     }
-    
+
     return getSessionsList(currentPage.value, page_size.value).then((res: any) => {
         if (res.data && res.data.length) {
             // Display all sessions globally without filtering
             res.data.forEach((item: any) => {
-                let obj = { 
-                    title: item.title ? item.title : t('menu.newSession'),
-                    path: `chat/${item.id}`, 
-                    id: item.id, 
-                    isMore: false, 
+                let obj = {
+                    title: item.title ? item.title : "新会话",
+                    path: `chat/${item.id}`,
+                    id: item.id,
+                    isMore: false,
                     isNoTitle: item.title ? false : true,
                     created_at: item.created_at,
                     updated_at: item.updated_at
@@ -553,7 +557,7 @@ onMounted(async () => {
         currentKbName.value = ''
         currentKbInfo.value = null
     }
-    
+
     // 加载对话列表
     getMessageList();
     // 若组织列表未加载则拉取一次，用于侧栏「待审批」角标
@@ -570,23 +574,23 @@ watch([() => route.name, () => route.params], (newvalue, oldvalue) => {
     } else {
         currentSecondpath.value = "";
     }
-    
+
     // 只在必要时刷新对话列表，避免不必要的重新加载导致列表抖动
     // 需要刷新的情况：
     // 1. 创建新会话后（从 creatChat/kbCreatChat 跳转到 chat/:id）
     // 2. 删除会话后已在 delCard 中处理，不需要在这里刷新
     const oldRouteNameStr = typeof oldvalue?.[0] === 'string' ? (oldvalue[0] as string) : (oldvalue?.[0] ? String(oldvalue[0]) : '')
-    const isCreatingNewSession = (oldRouteNameStr === 'globalCreatChat' || oldRouteNameStr === 'kbCreatChat') && 
+    const isCreatingNewSession = (oldRouteNameStr === 'globalCreatChat' || oldRouteNameStr === 'kbCreatChat') &&
                                  nameStr !== 'globalCreatChat' && nameStr !== 'kbCreatChat';
-    
+
     // 只在创建新会话时才刷新列表
     if (isCreatingNewSession) {
         getMessageList();
     }
-    
+
     // 路由变化时更新图标状态和知识库信息（不涉及对话列表）
     getIcon(nameStr);
-    
+
     // 如果切换了知识库，更新知识库名称但不重新加载对话列表
     if (newvalue[1].kbId !== oldvalue?.[1]?.kbId) {
         const kbId = (newvalue[1] as any)?.kbId as string;
@@ -621,30 +625,31 @@ let pathPrefix = ref(route.name)
       const agentsActiveState = route.name === 'agentList';
       const organizationsActiveState = route.name === 'organizationList';
       const knowledgeSearchActiveState = route.name === 'knowledgeSearch';
-      
+
       // 知识库图标：只在知识库页面显示绿色
       knowledgeIcon.value = kbActiveState.isKbActive ? 'zhishiku-green.svg' : 'zhishiku.svg';
-      
+
       // 知识搜索图标：只在知识搜索页面显示绿色
       searchIcon.value = knowledgeSearchActiveState ? 'search-green.svg' : 'search.svg';
-      
+
       // 智能体图标：只在智能体页面显示绿色
       agentIcon.value = agentsActiveState ? 'agent-green.svg' : 'agent.svg';
-      
+
       // 组织图标：只在组织页面显示绿色
       organizationIcon.value = organizationsActiveState ? 'organization-green.svg' : 'organization.svg';
-      
+
       // 对话图标：只在对话创建页面显示绿色，其他情况显示默认
       prefixIcon.value = creatChatActiveState.isCreatChatActive ? 'prefixIcon-green.svg' : 'prefixIcon.svg';
-      
+
       // 设置图标：只在设置页面显示绿色
       settingIcon.value = settingsActiveState.isSettingsActive ? 'setting-green.svg' : 'setting.svg';
-      
+
       // 退出图标：始终显示默认
       logoutIcon.value = 'logout.svg';
 }
 getIcon(typeof route.name === 'string' ? route.name as string : (route.name ? String(route.name) : ''))
 const handleMenuClick = async (path: string) => {
+    console.log("点击了按钮",path)
     if (path === 'knowledge-bases') {
         // 知识库菜单项：如果在知识库内部，跳转到当前知识库文件页；否则跳转到知识库列表
         const kbId = await getCurrentKbId()
@@ -695,17 +700,19 @@ const gotopage = async (path: string) => {
         }
         // 清理所有状态和本地存储
         authStore.logout();
-        MessagePlugin.success(t('menu.logoutSuccess'));
+        MessagePlugin.success('已退出登录');
         router.push('/login');
         return;
     } else {
         if (path === 'creatChat') {
             // 如果在知识库详情页，跳转到全局对话创建页
             if (isInKnowledgeBase.value) {
-                router.push('/platform/creatChat')
+
+              router.push(`/platform/creatChat${hideUser.value ? '?hide=1':''}`)
             } else {
                 // 如果不在知识库内，进入对话创建页
-                router.push(`/platform/creatChat`)
+                // router.push(`/platform/creatChat`)
+                router.push(`/platform/creatChat${hideUser.value ? '?hide=1':''}`)
             }
         } else {
             router.push(`/platform/${path}`);
@@ -872,7 +879,7 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
     .menu_box {
         display: flex;
         flex-direction: column;
-        
+
         &.has-submenu {
             flex: 1;
             min-height: 0;
@@ -997,7 +1004,7 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
         min-height: 0;
         margin-left: 4px;
     }
-    
+
     .timeline_header {
         font-family: "PingFang SC";
         font-size: 12px;
@@ -1007,7 +1014,7 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
         margin-top: 8px;
         line-height: 20px;
         user-select: none;
-        
+
         &:first-child {
             margin-top: 4px;
         }
@@ -1057,7 +1064,7 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
         &:hover {
             background: var(--td-bg-color-container-hover);
             color: var(--td-text-color-primary);
-            border-radius: 8px;
+            border-radius: 3px;
 
             .menu-more {
                 color: var(--td-text-color-primary);
@@ -1077,7 +1084,7 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
     .submenu_item_active {
         background: var(--td-brand-color-light) !important;
         color: var(--td-brand-color) !important;
-        border-radius: 8px;
+        border-radius: 3px;
 
         .menu-more {
             color: var(--td-brand-color) !important;
@@ -1100,7 +1107,7 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
 
     .submenu_item_selected {
         background: rgba(7, 192, 95, 0.05) !important;
-        border-radius: 8px;
+        border-radius: 3px;
     }
 
     .batch-checkbox {
@@ -1151,11 +1158,11 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
     justify-content: center;
     width: 16px;
     height: 16px;
-    
+
     &.rotate-180 {
         transform: rotate(180deg);
     }
-    
+
     &:hover {
         color: var(--td-brand-color);
     }
@@ -1167,7 +1174,7 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
     &.active:hover {
         color: var(--td-brand-color-active);
     }
-    
+
     svg {
         width: 12px;
         height: 12px;
@@ -1205,11 +1212,11 @@ const onDragHandleMouseDown = (e: MouseEvent) => {
         color: var(--td-brand-color);
         font-weight: 500;
     }
-    
+
     &:first-child {
         border-radius: 6px 6px 0 0;
     }
-    
+
     &:last-child {
         border-radius: 0 0 6px 6px;
     }
@@ -1280,7 +1287,45 @@ html[theme-mode="dark"] .aside_box .menu_item_active .menu_icon img.icon {
     opacity: 1;
 }
 
-// 下拉菜单样式已统一至 @/assets/dropdown-menu.less
+// 上传操作下拉菜单样式 - 全局样式（因为 TDesign 的下拉菜单挂载到 body 上）
+// 使用更具体的选择器来匹配上传操作下拉菜单
+.t-popup[data-popper-placement^="right"] {
+    .t-popup__content {
+        .t-dropdown__menu {
+            background: var(--td-bg-color-container) !important;
+            border: 1px solid var(--td-component-stroke) !important;
+            border-radius: 6px !important;
+            box-shadow: var(--td-shadow-2) !important;
+            padding: 4px !important;
+            min-width: 100px !important;
+        }
+
+        .t-dropdown__item {
+            padding: 8px 12px !important;
+            border-radius: 4px !important;
+            margin: 2px 0 !important;
+            transition: all 0.2s ease !important;
+            font-size: 14px !important;
+            color: var(--td-text-color-primary) !important;
+            min-width: auto !important;
+            max-width: none !important;
+            width: auto !important;
+            cursor: pointer !important;
+
+            &:hover {
+                background: var(--td-bg-color-container-hover) !important;
+                color: var(--td-brand-color) !important;
+            }
+
+            .t-dropdown__item-text {
+                color: inherit !important;
+                font-size: 14px !important;
+                line-height: 20px !important;
+                white-space: nowrap !important;
+            }
+        }
+    }
+}
 
 // 退出登录确认框样式
 :deep(.t-popconfirm) {
@@ -1302,24 +1347,24 @@ html[theme-mode="dark"] .aside_box .menu_item_active .menu_icon img.icon {
     .t-popconfirm__arrow::after {
         border-bottom-color: var(--td-bg-color-container);
     }
-    
+
     .t-popconfirm__buttons {
         margin-top: 8px;
         display: flex;
         justify-content: flex-end;
         gap: 8px;
     }
-    
+
     .t-button--variant-outline {
         border-color: var(--td-component-border);
         color: var(--td-text-color-secondary);
     }
-    
+
     .t-button--theme-danger {
         background-color: var(--td-error-color);
         border-color: var(--td-error-color);
     }
-    
+
     .t-button--theme-danger:hover {
         background-color: var(--td-error-color);
         border-color: var(--td-error-color);

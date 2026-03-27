@@ -27,10 +27,10 @@
           <span>Ollama</span>
         </div>
         <div class="menu-item" @click="handleQuickNav('websearch')">
-          <svg 
-            width="16" 
-            height="16" 
-            viewBox="0 0 18 18" 
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 18 18"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             class="menu-icon svg-icon"
@@ -65,7 +65,7 @@
             </svg>
           </span>
         </div>
-        <div class="menu-item" @click="openWebsite">
+        <div class="menu-item" @click="openWebsite" style="visibility:hidden">
           <t-icon name="home" class="menu-icon" />
           <span class="menu-text-with-icon">
             <span>{{ $t('common.website') }}</span>
@@ -77,7 +77,7 @@
             </svg>
           </span>
         </div>
-        <div class="menu-item" @click="openGithub">
+        <div class="menu-item"  style="visibility:hidden">
           <t-icon name="logo-github" class="menu-icon" />
           <span class="menu-text-with-icon">
             <span>GitHub</span>
@@ -143,7 +143,7 @@ const handleQuickNav = (section: string) => {
   menuVisible.value = false
   uiStore.openSettings()
   router.push('/platform/settings')
-  
+
   // 延迟一下，确保设置页面已经渲染
   setTimeout(() => {
     // 触发设置页面切换到对应section
@@ -180,7 +180,7 @@ const openGithub = () => {
 // 注销
 const handleLogout = async () => {
   menuVisible.value = false
-  
+
   try {
     // 调用后端API注销
     await logoutApi()
@@ -188,12 +188,12 @@ const handleLogout = async () => {
     // 即使API调用失败，也继续执行本地清理
     console.error('注销API调用失败:', error)
   }
-  
+
   // 清理所有状态和本地存储
   authStore.logout()
-  
+
   MessagePlugin.success(t('auth.logout'))
-  
+
   // 跳转到登录页
   router.push('/login')
 }
@@ -401,7 +401,7 @@ onUnmounted(() => {
   .menu-icon {
     font-size: 16px;
     color: var(--td-text-color-secondary);
-    
+
     &.svg-icon {
       width: 16px;
       height: 16px;
@@ -462,4 +462,3 @@ onUnmounted(() => {
   transform: translateY(0);
 }
 </style>
-
