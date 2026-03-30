@@ -49,6 +49,7 @@ services:
       start_period: 60s
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-}
+      - SSRF_WHITELIST=internal.service,*.corp.example,10.124.0.0/12,192.168.0.0/24
       - COS_SECRET_ID=${COS_SECRET_ID:-}
       - COS_SECRET_KEY=${COS_SECRET_KEY:-}
       - COS_REGION=${COS_REGION:-}
