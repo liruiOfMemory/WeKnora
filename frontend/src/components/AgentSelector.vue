@@ -26,7 +26,7 @@
               <div v-else class="builtin-icon normal">
                 <TIcon name="app" size="13px" />
               </div>
-              <span class="agent-option-name">{{ agent.name }}</span>
+              <span class="agent-option-name">{{ agent.name ==="智能推理"? "小云智问":  agent.name }}</span>
               <div v-if="getAgentNotReadyLabels(agent).length" class="agent-option-actions">
                 <t-tooltip :content="$t('agent.selector.notReadyHint', { items: formatNotReadyHint(agent) })"
                   placement="top">
@@ -256,6 +256,9 @@ const builtinAgents = computed(() => {
       return { ...agent, name: t('input.normalMode'), description: t('input.normalModeDesc') };
     }
     if (agent.id === BUILTIN_SMART_REASONING_ID) {
+        if (agent.id === "builtin-smart-reasoning") {
+        agent.name = "小云智问";
+      }
       return { ...agent, name: t('input.agentMode'), description: t('input.agentModeDesc') };
     }
     return agent;

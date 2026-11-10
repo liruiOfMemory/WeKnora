@@ -1,332 +1,328 @@
 <template>
   <div class="login-layout">
-    <div class="animated-bg">
-      <div class="knowledge-node node-1">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+    <!-- 背景装饰开始 -->
+    <!-- 四方网格 -->
+    <svg class="bg-net" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" fill="none">
+      <g stroke="rgba(110,231,183,.15)" stroke-width="1.2">
+        <path class="net-dash" d="M120 640 L300 470 L520 560 L700 380 L920 470 L1130 300" />
+        <path d="M300 470 L430 250 L700 380 M520 560 L640 720 L920 470 M700 380 L810 180 L1130 300" />
+        <path class="net-dash" d="M430 250 L810 180" />
+        <path d="M60 200 L230 320 L430 250 M1130 300 L1320 420 L1240 620" />
+      </g>
+      <g fill="rgba(110,231,183,.55)">
+        <circle cx="300" cy="470" r="3.5" />
+        <circle cx="700" cy="380" r="4.5" />
+        <circle cx="920" cy="470" r="3" />
+        <circle cx="1130" cy="300" r="4" />
+        <circle cx="430" cy="250" r="3" />
+        <circle cx="1240" cy="620" r="3.5" />
+      </g>
+      <g fill="rgba(52,211,153,.9)" class="float-a">
+        <circle cx="520" cy="560" r="5" />
+        <circle cx="810" cy="180" r="5" />
+      </g>
+      <g fill="rgba(209,250,229,.9)" class="float-b">
+        <circle cx="640" cy="720" r="4" />
+        <circle cx="1320" cy="420" r="4" />
+      </g>
+      <g fill="rgba(167,243,208,.4)">
+        <circle cx="120" cy="640" r="2.5" />
+        <circle cx="60" cy="200" r="2.5" />
+        <circle cx="230" cy="320" r="2.5" />
+        <circle cx="1020" cy="760" r="2.5" />
+        <circle cx="1380" cy="160" r="2.5" />
+        <circle cx="240" cy="820" r="2.5" />
+      </g>
+    </svg>
+    <!-- 连接的轨道线 -->
+    <div class="bg-grid"></div>
+    <!-- 动的线条 -->
+    <!-- <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div> -->
+    <!-- 漂浮玻璃信息片（产品能力氛围） -->
+    <div class="float-chip fc-1">
+      <span class="fc-ic">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.7 21a2 2 0 0 1-3.4 0" />
         </svg>
-      </div>
-      <div class="knowledge-node node-2">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-3">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5z" />
-          <path d="M2 17l10 5 10-5" />
-          <path d="M2 12l10 5 10-5" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-4">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <ellipse cx="12" cy="5" rx="9" ry="3" />
-          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-5">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.35-4.35" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-6">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path
-            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-          <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-          <line x1="12" y1="22.08" x2="12" y2="12" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-7">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      </span>
+      <span><b>AI 洞察</b> · 发现 3 条组合型风险线索</span>
+    </div>
+    <div class="float-chip fc-2">
+      <span class="fc-ic">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
+          <path d="M14 2v6h6M9 15l2 2 4-4" />
         </svg>
-      </div>
-      <div class="knowledge-node node-8">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-          <circle cx="9" cy="7" r="4" />
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-9">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-10">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3" />
-          <path
-            d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-11">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 11l3 3L22 4" />
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-        </svg>
-      </div>
-      <div class="knowledge-node node-12">
-        <svg class="node-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polygon
-            points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-        </svg>
-      </div>
-
-      <svg class="knowledge-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <line class="connection-line line-1" x1="20" y1="15" x2="35" y2="25" />
-        <line class="connection-line line-2" x1="35" y1="25" x2="55" y2="20" />
-        <line class="connection-line line-3" x1="55" y1="20" x2="85" y2="12" />
-        <line class="connection-line line-4" x1="8" y1="35" x2="25" y2="45" />
-        <line class="connection-line line-5" x1="25" y1="45" x2="65" y2="48" />
-        <line class="connection-line line-6" x1="20" y1="60" x2="60" y2="75" />
-        <line class="connection-line line-7" x1="20" y1="15" x2="20" y2="60" />
-        <line class="connection-line line-8" x1="55" y1="20" x2="45" y2="50" />
-        <line class="connection-line line-9" x1="65" y1="48" x2="90" y2="38" />
-        <line class="connection-line line-10" x1="40" y1="70" x2="75" y2="80" />
-        <line class="connection-line line-11" x1="35" y1="25" x2="25" y2="45" />
-        <line class="connection-line line-12" x1="75" y1="30" x2="65" y2="48" />
-      </svg>
+      </span>
+      <span><b>AI报告</b> ·《预算执行报告》已生成</span>
     </div>
-
-    <!-- Logo - Top Left -->
-    <a href="https://github.com/Tencent/WeKnora" target="_blank" class="header-logo" :title="$t('common.github')">
-      <img src="@/assets/img/weknora.png" alt="WeKnora" class="logo-image" />
-    </a>
-
-    <!-- Header Links - Top Right -->
-    <div class="header-links">
-      <a href="https://weknora.weixin.qq.com" target="_blank" class="header-link" :title="$t('common.website')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-          stroke-linecap="round">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="2" y1="12" x2="22" y2="12" />
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-        </svg>
-        <span class="link-text">{{ $t('common.website') }}</span>
-      </a>
-
-      <a href="https://github.com/Tencent/WeKnora" target="_blank" class="header-link" :title="$t('common.info')">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-        </svg>
-        <span class="link-text">GitHub</span>
-      </a>
-
-      <div class="language-switch">
-        <button @click="toggleLanguageMenu" class="header-link" :title="currentLangOption?.label">
-          <span class="lang-flag-icon">{{ currentLangOption?.flag }}</span>
-          <span class="link-text">{{ currentLangOption?.shortLabel }}</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-            stroke-linecap="round">
-            <polyline points="6 9 12 15 18 9" />
+    <!-- 背景装饰结束 -->
+    <!-- 小云智问头部 -->
+    <header class="topbar" style="padding: 0.5rem">
+      <div class="brand">
+        <span class="brand-mark">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="#fff">
+            <path d="M12 2l2.1 6.3L20 10l-5.9 1.7L12 18l-2.1-6.3L4 10l5.9-1.7L12 2z" />
+            <circle cx="19" cy="18" r="2" />
           </svg>
-        </button>
-
-        <!-- Language Dropdown -->
-        <div v-if="showLanguageMenu" class="language-dropdown">
-          <div v-for="lang in languageOptions" :key="lang.value" @click="selectLanguage(lang.value)"
-            class="language-option" :class="{ active: currentLanguage === lang.value }">
-            <span class="lang-flag">{{ lang.flag }}</span>
-            <span class="lang-label">{{ lang.label }}</span>
-            <span v-if="currentLanguage === lang.value" class="check-icon">✓</span>
-          </div>
-        </div>
+        </span>
+        <span class="brand-name">小云智问</span>
+        <span class="brand-div"></span>
+        <span class="brand-sub">云南省人大预算和国有资产联网监督系统</span>
       </div>
-    </div>
-
-    <!-- Left Showcase Section -->
-    <div class="showcase-section">
-      <div class="showcase-content">
-        <p class="showcase-subtitle">{{ $t('platform.subtitle') }}</p>
-        <p class="showcase-description">{{ $t('platform.description') }}</p>
-
-        <div class="feature-tags">
-          <span class="tag">{{ $t('platform.rag') }}</span>
-          <span class="tag">{{ $t('platform.agent') }}</span>
-          <span class="tag">{{ $t('platform.wiki') }}</span>
-          <span class="tag">{{ $t('platform.hybridSearch') }}</span>
-        </div>
-
-        <!-- Swiper Carousel -->
-        <div class="carousel-container">
-          <swiper :modules="modules" :slides-per-view="1" :loop="true" :autoplay="{
-            delay: 4000,
-            disableOnInteraction: false,
-          }" :effect="'fade'" :fade-effect="{ crossFade: true }"
-            :pagination="{ clickable: true, dynamicBullets: false }" :speed="800" class="screenshot-swiper">
-            <swiper-slide v-for="(slide, index) in slides" :key="index">
-              <div class="slide-content">
-                <img :src="slide.image" :alt="slide.title" class="slide-image" />
-              </div>
-            </swiper-slide>
-          </swiper>
-        </div>
+      <div class="net-chip">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+        </svg>
+        政务外网 · 安全接入
       </div>
-    </div>
+    </header>
+    <!-- 主要的内容 -->
+    <div class="main-container" style="padding-top: 4rem">
+      <!-- 左侧品牌区 -->
+      <div class="hero" style="padding: 0.5rem">
+        <div class="eyebrow">云南省人大预算和国有资产联网监督系统 | AI 智能助手</div>
+        <!-- <h1><span class="grad">智析预算数据</span><span class="dot">·</span>洞见监督未来</h1>
+        <p class="sub">以大模型深度赋能预算审查监督——<b>听得懂</b>问话、<b>看得见</b>关联、<b>主动提</b>风险、<b>学得会</b>逻辑，让“1 人 1 委”的县级人大也能高质量完成监督任务。</p> -->
 
-    <!-- Right Form Section -->
-    <div class="form-section">
-      <div class="form-panel">
-        <!-- Login Card -->
-        <div class="form-card" v-if="!isRegisterMode">
-          <!-- 登录已有账号时保留邀请上下文。 -->
-          <div v-if="inviteLookup" class="invite-banner">
-            <t-icon name="link" class="invite-banner__icon" />
-            <div class="invite-banner__text">
-              <div class="invite-banner__title">
-                {{ $t('inviteRegister.bannerTitle', { tenant: inviteLookup.tenant_name || '' }) }}
-              </div>
-              <div class="invite-banner__hint">
-                {{ $t('inviteRegister.bannerHintLogin') }}
-              </div>
+        <div class="caps">
+          <div class="cap">
+            <span class="cap-ic"
+              ><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                <path d="M8 9h8M8 13h5" />
+              </svg>
+            </span>
+            <div>
+              <h3>智能问答与拓展分析</h3>
+              <p>自然语言即问即答，自动关联数据维度，输出有分析、有结论的回答</p>
             </div>
           </div>
-          <div v-else-if="inviteLookupError" class="invite-banner invite-banner--error">
-            {{ inviteLookupError }}
+          <div class="cap">
+            <span class="cap-ic" data-page-node-id="DZ4iaUh4Zh9fJVee9YKjUB"
+              ><svg
+                width="19"
+                height="19"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                data-page-node-id="7UwIjUVd7JqNm9sR601EzZ"
+              >
+                <path d="M16 3h5v5M21 3l-7 7M8 21H3v-5M3 21l7-7" data-page-node-id="DVBOfcP6EtaVRVRVxGOcVA" />
+              </svg>
+            </span>
+            <div data-page-node-id="Kqncj43RqWCqqKxoyHZ8qJ">
+              <h3 data-page-node-id="Nf7CTu6ApK8nBJ1mGOID7G">智能比对与综合分析</h3>
+              <p data-page-node-id="sxZJDQxj3a0phDHWC66POc">多源数据自动比对，识别偏差、异常与趋势，输出有判断的综合研判</p>
+            </div>
           </div>
-          <div class="form-header">
-            <h2 class="form-title">{{ $t('auth.login') }}</h2>
-            <p class="form-welcome">{{ $t('auth.subtitle') }}</p>
-            <p v-if="registrationEnabled" class="form-hint">{{ $t('auth.loginHint') }}</p>
+          <div class="cap">
+            <span class="cap-ic"
+              ><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+            </span>
+            <div>
+              <h3>规则触发 + AI 洞察</h3>
+              <p>双层预警机制，在既有规则之上主动扫描，提炼高价值风险线索</p>
+            </div>
           </div>
-
-          <div class="form-content">
-            <t-form ref="formRef" :data="formData" :rules="formRules" @submit="handleLogin" layout="vertical"
-              label-align="top">
-              <t-form-item :label="$t('auth.email')" name="email">
-                <t-input v-model="formData.email" :placeholder="$t('auth.emailPlaceholder')" type="text"
-                  autocomplete="email" size="large" :disabled="loading" />
-              </t-form-item>
-
-              <t-form-item :label="$t('auth.password')" name="password">
-                <t-input v-model="formData.password" :placeholder="$t('auth.passwordPlaceholder')" type="password"
-                  autocomplete="current-password" size="large" :disabled="loading" @enter="handleLogin" />
-              </t-form-item>
-
-              <t-button type="submit" theme="primary" size="large" block :loading="loading" class="submit-button">
-                {{ loading ? $t('auth.loggingIn') : $t('auth.login') }}
-              </t-button>
-
-              <div class="register-cta" v-if="registrationEnabled">
-                <div class="register-cta__divider">
-                  <span>{{ $t('auth.firstTime') }}</span>
+          <div class="cap">
+            <span class="cap-ic"
+              ><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" data-page-node-id="Fo5PWVxADmcIQcy3v16hnO" />
+              </svg>
+            </span>
+            <div>
+              <h3>智能报告生成</h3>
+              <p>学习历年监督稿件与监督逻辑，自动生成符合人大监督视角的报告</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- Right Form Section -->
+        <div class="form-section">
+          <div class="form-panel">
+            <!-- Login Card -->
+            <div class="form-card" v-if="!isRegisterMode">
+              <!-- invite_only 模式下共享链接停在登录卡，同样需要邀请上下文。 -->
+              <div v-if="inviteLookup" class="invite-banner">
+                <t-icon name="link" class="invite-banner__icon" />
+                <div class="invite-banner__text">
+                  <div class="invite-banner__title">
+                    {{
+                      $t("inviteRegister.bannerTitle", {
+                        tenant: inviteLookup.tenant_name || "",
+                      })
+                    }}
+                  </div>
+                  <div class="invite-banner__hint">
+                    {{ $t("inviteRegister.bannerHintLogin") }}
+                  </div>
                 </div>
-                <t-button theme="default" variant="outline" size="large" block class="register-cta__button"
-                  :disabled="loading" @click="toggleMode">
-                  {{ $t('auth.createAccount') }}
-                </t-button>
+              </div>
+              <div v-else-if="inviteLookupError" class="invite-banner invite-banner--error">
+                {{ inviteLookupError }}
+              </div>
+              <div class="form-header">
+                <h2 class="form-title">{{ $t("auth.login") }}</h2>
+                <p class="form-welcome">{{ $t("auth.subtitle") }}</p>
+                <p v-if="registrationEnabled" class="form-hint">
+                  {{ $t("auth.loginHint") }}
+                </p>
               </div>
 
-              <div v-if="oidcEnabled" class="oidc-divider">
-                <span>{{ $t('auth.orContinueWith') }}</span>
-              </div>
+              <div class="form-content">
+                <t-form ref="formRef" :data="formData" :rules="formRules" @submit="handleLogin" layout="vertical" label-align="top">
+                  <t-form-item :label="$t('auth.email')" name="email">
+                    <t-input v-model="formData.email" :placeholder="$t('auth.emailPlaceholder')" type="text" autocomplete="email" size="large" :disabled="loading" />
+                  </t-form-item>
 
-              <t-button v-if="oidcEnabled" theme="default" size="large" block :loading="oidcLoading" :disabled="loading"
-                class="oidc-button" @click="handleOIDCLogin">
-                {{ oidcLoading ? $t('auth.redirectingToOIDC') : oidcLoginText }}
-              </t-button>
-            </t-form>
+                  <t-form-item :label="$t('auth.password')" name="password">
+                    <t-input
+                      v-model="formData.password"
+                      :placeholder="$t('auth.passwordPlaceholder')"
+                      type="password"
+                      autocomplete="current-password"
+                      size="large"
+                      :disabled="loading"
+                      @enter="handleLogin"
+                    />
+                  </t-form-item>
 
-            <!-- Features list -->
-            <div class="login-features">
-              <div class="feature-item">
-                <span class="feature-icon">✓</span>
-                <span class="feature-text">{{ $t('platform.multimodalParsing') }}</span>
-              </div>
-              <div class="feature-item">
-                <span class="feature-icon">✓</span>
-                <span class="feature-text">{{ $t('platform.hybridSearchEngine') }}</span>
-              </div>
-              <div class="feature-item">
-                <span class="feature-icon">✓</span>
-                <span class="feature-text">{{ $t('platform.ragQandA') }}</span>
+                  <t-button type="submit" theme="primary" size="large" block :loading="loading" class="submit-button">
+                    {{ loading ? $t("auth.loggingIn") : $t("auth.login") }}
+                  </t-button>
+
+                  <div class="register-cta" v-if="registrationEnabled">
+                    <div class="register-cta__divider">
+                      <span>{{ $t("auth.firstTime") }}</span>
+                    </div>
+                    <t-button theme="default" variant="outline" size="large" block class="register-cta__button" :disabled="loading" @click="toggleMode">
+                      {{ $t("auth.createAccount") }}
+                    </t-button>
+                  </div>
+
+                  <div v-if="oidcEnabled" class="oidc-divider">
+                    <span>{{ $t("auth.orContinueWith") }}</span>
+                  </div>
+
+                  <t-button v-if="oidcEnabled" theme="default" size="large" block :loading="oidcLoading" :disabled="loading" class="oidc-button" @click="handleOIDCLogin">
+                    {{ oidcLoading ? $t("auth.redirectingToOIDC") : oidcLoginText }}
+                  </t-button>
+                </t-form>
+
+                <!-- Features list -->
+                <div class="login-features">
+                  <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">{{ $t("platform.multimodalParsing") }}</span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">{{ $t("platform.hybridSearchEngine") }}</span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">{{ $t("platform.ragQandA") }}</span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Registration must be allowed for this mode and invitation. -->
-        <div class="form-card" v-if="isRegisterMode && registrationEnabled">
-          <!-- Share-link banner: shown only when ?token= resolved to a
+            <!-- Register Card. Renders when the user is in register mode
+             AND either self-service registration is enabled OR they
+             arrived with a valid share-link token (which bypasses the
+             invite_only gate). -->
+            <div class="form-card" v-if="isRegisterMode && (registrationEnabled || inviteLookup)">
+              <!-- Share-link banner: shown only when ?token= resolved to a
                real invitation row. Sits above the form header so the
                invitee instantly sees who invited them and into which
                workspace, without bumping the existing register UX. -->
-          <div v-if="inviteLookup" class="invite-banner">
-            <t-icon name="link" class="invite-banner__icon" />
-            <div class="invite-banner__text">
-              <div class="invite-banner__title">
-                {{ $t('inviteRegister.bannerTitle', { tenant: inviteLookup.tenant_name || '' }) }}
+              <div v-if="inviteLookup" class="invite-banner">
+                <t-icon name="link" class="invite-banner__icon" />
+                <div class="invite-banner__text">
+                  <div class="invite-banner__title">
+                    {{
+                      $t("inviteRegister.bannerTitle", {
+                        tenant: inviteLookup.tenant_name || "",
+                      })
+                    }}
+                  </div>
+                  <div class="invite-banner__hint">
+                    {{ $t("inviteRegister.bannerHint") }}
+                  </div>
+                </div>
               </div>
-              <div class="invite-banner__hint">
-                {{ $t('inviteRegister.bannerHint') }}
+              <div v-else-if="inviteLookupError" class="invite-banner invite-banner--error">
+                {{ inviteLookupError }}
               </div>
-            </div>
-          </div>
-          <div v-else-if="inviteLookupError" class="invite-banner invite-banner--error">
-            {{ inviteLookupError }}
-          </div>
-          <div class="form-header">
-            <h2 class="form-title">{{ $t('auth.createAccount') }}</h2>
-            <p class="form-subtitle">{{ $t('auth.registerSubtitle') }}</p>
-          </div>
-
-          <div class="form-content">
-            <t-form ref="registerFormRef" :data="registerData" :rules="registerRules" @submit="handleRegister"
-              layout="vertical" label-align="top">
-              <t-form-item :label="$t('auth.username')" name="username">
-                <t-input v-model="registerData.username" :placeholder="$t('auth.usernamePlaceholder')" size="large"
-                  :disabled="loading" />
-              </t-form-item>
-
-              <t-form-item :label="$t('auth.email')" name="email">
-                <t-input v-model="registerData.email" :placeholder="$t('auth.emailPlaceholder')" type="text"
-                  autocomplete="email" size="large" :disabled="loading" />
-              </t-form-item>
-
-              <t-form-item :label="$t('auth.password')" name="password">
-                <t-input v-model="registerData.password" :placeholder="$t('auth.passwordPlaceholder')" type="password"
-                  autocomplete="new-password" size="large" :disabled="loading" />
-              </t-form-item>
-
-              <t-form-item :label="$t('auth.confirmPassword')" name="confirmPassword">
-                <t-input v-model="registerData.confirmPassword" :placeholder="$t('auth.confirmPasswordPlaceholder')"
-                  type="password" autocomplete="new-password" size="large" :disabled="loading"
-                  @enter="handleRegister" />
-              </t-form-item>
-
-              <t-button type="submit" theme="primary" size="large" block :loading="loading" class="submit-button">
-                {{ loading ? $t('auth.registering') : $t('auth.register') }}
-              </t-button>
-            </t-form>
-
-            <div class="form-footer">
-              <span>{{ $t('auth.haveAccount') }}</span>
-              <a href="#" @click.prevent="toggleMode" class="link-button">
-                {{ $t('auth.backToLogin') }}
-              </a>
-            </div>
-
-            <!-- Features list for register -->
-            <div class="login-features">
-              <div class="feature-item">
-                <span class="feature-icon">✓</span>
-                <span class="feature-text">{{ $t('platform.independentTenant') }}</span>
+              <div class="form-header">
+                <h2 class="form-title">{{ $t("auth.createAccount") }}</h2>
+                <p class="form-subtitle">{{ $t("auth.registerSubtitle") }}</p>
               </div>
-              <div class="feature-item">
-                <span class="feature-icon">✓</span>
-                <span class="feature-text">{{ $t('platform.fullApiAccess') }}</span>
-              </div>
-              <div class="feature-item">
-                <span class="feature-icon">✓</span>
-                <span class="feature-text">{{ $t('platform.knowledgeBaseManagement') }}</span>
+
+              <div class="form-content">
+                <t-form ref="registerFormRef" :data="registerData" :rules="registerRules" @submit="handleRegister" layout="vertical" label-align="top">
+                  <t-form-item :label="$t('auth.username')" name="username">
+                    <t-input v-model="registerData.username" :placeholder="$t('auth.usernamePlaceholder')" size="large" :disabled="loading" />
+                  </t-form-item>
+
+                  <t-form-item :label="$t('auth.email')" name="email">
+                    <t-input v-model="registerData.email" :placeholder="$t('auth.emailPlaceholder')" type="text" autocomplete="email" size="large" :disabled="loading" />
+                  </t-form-item>
+
+                  <t-form-item :label="$t('auth.password')" name="password">
+                    <t-input v-model="registerData.password" :placeholder="$t('auth.passwordPlaceholder')" type="password" autocomplete="new-password" size="large" :disabled="loading" />
+                  </t-form-item>
+
+                  <t-form-item :label="$t('auth.confirmPassword')" name="confirmPassword">
+                    <t-input
+                      v-model="registerData.confirmPassword"
+                      :placeholder="$t('auth.confirmPasswordPlaceholder')"
+                      type="password"
+                      autocomplete="new-password"
+                      size="large"
+                      :disabled="loading"
+                      @enter="handleRegister"
+                    />
+                  </t-form-item>
+
+                  <t-button type="submit" theme="primary" size="large" block :loading="loading" class="submit-button">
+                    {{ loading ? $t("auth.registering") : $t("auth.register") }}
+                  </t-button>
+                </t-form>
+
+                <div class="form-footer">
+                  <span>{{ $t("auth.haveAccount") }}</span>
+                  <a href="#" @click.prevent="toggleMode" class="link-button">
+                    {{ $t("auth.backToLogin") }}
+                  </a>
+                </div>
+
+                <!-- Features list for register -->
+                <div class="login-features">
+                  <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">{{ $t("platform.independentTenant") }}</span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">{{ $t("platform.fullApiAccess") }}</span>
+                  </div>
+                  <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">{{ $t("platform.knowledgeBaseManagement") }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -337,378 +333,392 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, nextTick, onMounted, onBeforeUnmount, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { MessagePlugin } from 'tdesign-vue-next'
-import { useRoleLabel } from '@/composables/useRoleLabel'
-import { notifyLoginSuccess } from '@/utils/loginNotify'
-import { canRegister } from './registrationPolicy'
-import { newPasswordRules } from '@/utils/passwordPolicy'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Autoplay, EffectFade, Pagination } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/effect-fade'
-import 'swiper/css/pagination'
-import {
-  login,
-  register,
-  getOIDCAuthorizationURL,
-  getOIDCConfig,
-  autoSetup,
-  getAuthConfig,
-  userInfoFromApi,
-  getInvitationByToken,
-  registerByInvite,
-  type InviteLookup,
-} from '@/api/auth'
-import { useAuthStore } from '@/stores/auth'
-import { useI18n } from 'vue-i18n'
-import { getApiBaseUrl } from '@/utils/api-base'
+import { ref, reactive, nextTick, onMounted, onBeforeUnmount, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { MessagePlugin } from "tdesign-vue-next";
+import { useRoleLabel } from "@/composables/useRoleLabel";
+import { notifyLoginSuccess } from "@/utils/loginNotify";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Autoplay, EffectFade, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import "swiper/css/pagination";
+import { login, register, getOIDCAuthorizationURL, getOIDCConfig, autoSetup, getAuthConfig, userInfoFromApi, getInvitationByToken, registerByInvite, type InviteLookup } from "@/api/auth";
+import { useAuthStore } from "@/stores/auth";
+import { useI18n } from "vue-i18n";
 
 // Import screenshot images
-import screenshot1 from '@/assets/img/screenshot-1.svg'
-import screenshot2 from '@/assets/img/screenshot-2.svg'
-import screenshot3 from '@/assets/img/screenshot-3.svg'
-import screenshot4 from '@/assets/img/screenshot-4.svg'
+import screenshot1 from "@/assets/img/screenshot-1.svg";
+import screenshot2 from "@/assets/img/screenshot-2.svg";
+import screenshot3 from "@/assets/img/screenshot-3.svg";
+import screenshot4 from "@/assets/img/screenshot-4.svg";
 
-const router = useRouter()
-const route = useRoute()
-const authStore = useAuthStore()
-const { t, tm, locale } = useI18n()
-const { formatRole, roleIcon } = useRoleLabel()
+const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
+const { t, tm, locale } = useI18n();
+const { formatRole, roleIcon } = useRoleLabel();
 
 // Swiper modules
-const modules = [Autoplay, EffectFade, Pagination]
+const modules = [Autoplay, EffectFade, Pagination];
 
 // Carousel slides data
 const slides = [
   {
     image: screenshot4,
-    title: t('platform.carousel.agenticRagTitle'),
-    description: t('platform.carousel.agenticRagDesc')
+    title: t("platform.carousel.agenticRagTitle"),
+    description: t("platform.carousel.agenticRagDesc"),
   },
   {
     image: screenshot2,
-    title: t('platform.carousel.hybridSearchTitle'),
-    description: t('platform.carousel.hybridSearchDesc')
+    title: t("platform.carousel.hybridSearchTitle"),
+    description: t("platform.carousel.hybridSearchDesc"),
   },
   {
     image: screenshot3,
-    title: t('platform.carousel.wikiTitle'),
-    description: t('platform.carousel.wikiDesc')
+    title: t("platform.carousel.wikiTitle"),
+    description: t("platform.carousel.wikiDesc"),
   },
   {
     image: screenshot1,
-    title: t('platform.carousel.smartDocRetrievalTitle'),
-    description: t('platform.carousel.smartDocRetrievalDesc')
-  }
-]
+    title: t("platform.carousel.smartDocRetrievalTitle"),
+    description: t("platform.carousel.smartDocRetrievalDesc"),
+  },
+];
 
 // Form references
-const formRef = ref()
-const registerFormRef = ref()
+const formRef = ref();
+const registerFormRef = ref();
 
 // State management
-const loading = ref(false)
-const oidcLoading = ref(false)
-const isRegisterMode = ref(false)
-const showLanguageMenu = ref(false)
-const oidcEnabled = ref(false)
-const oidcProviderName = ref('')
-// Wait for configuration before showing a registration entry.
-const registrationMode = ref('')
-const registrationEnabled = computed(() => canRegister(registrationMode.value, !!inviteLookup.value))
-const complexPasswordEnabled = ref(false)
+const loading = ref(false);
+const oidcLoading = ref(false);
+const isRegisterMode = ref(false);
+const showLanguageMenu = ref(false);
+const oidcEnabled = ref(false);
+const oidcProviderName = ref("");
+// registrationEnabled defaults to true so that on first paint the Register
+// link is visible; the actual mode is fetched from /auth/config in onMounted.
+// In invite_only mode the link/card are hidden.
+const registrationEnabled = ref(true);
 
 // invite-link state. When the URL carries ?token=xxx we resolve it to
 // the originating tenant + role and switch the form into a "register
-// via invitation" mode when invitation registration is enabled. Submitting the register
+// via invitation" mode. The token bypasses the normal invite_only
+// gate — possessing it IS the authorisation. Submitting the register
 // form with this set hits /auth/register-by-invite (auto-login on
 // success) instead of /auth/register.
-const inviteToken = ref('')
-const inviteLookup = ref<InviteLookup | null>(null)
-const inviteLookupError = ref('')
-const inviteLookupLoading = ref(false)
+const inviteToken = ref("");
+const inviteLookup = ref<InviteLookup | null>(null);
+const inviteLookupError = ref("");
+const inviteLookupLoading = ref(false);
 
 // Language options
 const languageOptions = [
-  { value: 'zh-CN', label: '简体中文', shortLabel: '中文', flag: '🇨🇳' },
-  { value: 'zh-TW', label: '繁體中文', shortLabel: '繁中', flag: '繁' },
-  { value: 'en-US', label: 'English', shortLabel: 'EN', flag: '🇺🇸' },
-  { value: 'ru-RU', label: 'Русский', shortLabel: 'RU', flag: '🇷🇺' },
-  { value: 'ko-KR', label: '한국어', shortLabel: '한국어', flag: '🇰🇷' },
-  { value: 'ja-JP', label: '日本語', shortLabel: '日本語', flag: '🇯🇵' }
-]
+  { value: "zh-CN", label: "简体中文", shortLabel: "中文", flag: "🇨🇳" },
+  { value: "en-US", label: "English", shortLabel: "EN", flag: "🇺🇸" },
+  { value: "ru-RU", label: "Русский", shortLabel: "RU", flag: "🇷🇺" },
+  { value: "ko-KR", label: "한국어", shortLabel: "한국어", flag: "🇰🇷" },
+];
 
-const currentLanguage = computed(() => locale.value)
+const currentLanguage = computed(() => locale.value);
 const oidcLoginText = computed(() => {
   if (oidcProviderName.value) {
-    return t('auth.oidcLoginWithProvider', { provider: oidcProviderName.value })
+    return t("auth.oidcLoginWithProvider", {
+      provider: oidcProviderName.value,
+    });
   }
-  return t('auth.oidcLogin')
-})
-const currentLangOption = computed(() => languageOptions.find(l => l.value === currentLanguage.value))
+  return t("auth.oidcLogin");
+});
+const currentLangOption = computed(() => languageOptions.find((l) => l.value === currentLanguage.value));
 
 // Login form data
 const formData = reactive<{ [key: string]: any }>({
-  email: '',
-  password: '',
-})
+  email: "",
+  password: "",
+});
 
 // Register form data
 const registerData = reactive<{ [key: string]: any }>({
-  username: '',
-  email: '',
-  password: '',
-  confirmPassword: ''
-})
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+});
 
 // Login form validation rules
 const formRules = computed(() => ({
   email: [
-    { required: true, message: t('auth.emailRequired'), type: 'error' },
-    { email: true, message: t('auth.emailInvalid'), type: 'error' }
+    { required: true, message: t("auth.emailRequired"), type: "error" },
+    { email: true, message: t("auth.emailInvalid"), type: "error" },
   ],
   password: [
-    { required: true, message: t('auth.passwordRequired'), type: 'error' },
-    { min: 8, message: t('auth.passwordMinLength'), type: 'error' },
-    { max: 32, message: t('auth.passwordMaxLength'), type: 'error' }
+    { required: true, message: t("auth.passwordRequired"), type: "error" },
+    { min: 8, message: t("auth.passwordMinLength"), type: "error" },
+    { max: 32, message: t("auth.passwordMaxLength"), type: "error" },
+    {
+      pattern: /[a-zA-Z]/,
+      message: t("auth.passwordMustContainLetter"),
+      type: "error",
+    },
+    {
+      pattern: /\d/,
+      message: t("auth.passwordMustContainNumber"),
+      type: "error",
+    },
   ],
-}))
+}));
 
 // Register form validation rules
 const registerRules = computed(() => ({
   username: [
-    { required: true, message: t('auth.usernameRequired'), type: 'error' },
-    { min: 2, message: t('auth.usernameMinLength'), type: 'error' },
-    { max: 20, message: t('auth.usernameMaxLength'), type: 'error' },
+    { required: true, message: t("auth.usernameRequired"), type: "error" },
+    { min: 2, message: t("auth.usernameMinLength"), type: "error" },
+    { max: 20, message: t("auth.usernameMaxLength"), type: "error" },
     {
       pattern: /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/,
-      message: t('auth.usernameInvalid'),
-      type: 'error'
-    }
+      message: t("auth.usernameInvalid"),
+      type: "error",
+    },
   ],
   email: [
-    { required: true, message: t('auth.emailRequired'), type: 'error' },
-    { email: true, message: t('auth.emailInvalid'), type: 'error' }
+    { required: true, message: t("auth.emailRequired"), type: "error" },
+    { email: true, message: t("auth.emailInvalid"), type: "error" },
   ],
-  password: newPasswordRules(t, complexPasswordEnabled.value),
+  password: [
+    { required: true, message: t("auth.passwordRequired"), type: "error" },
+    { min: 8, message: t("auth.passwordMinLength"), type: "error" },
+    { max: 32, message: t("auth.passwordMaxLength"), type: "error" },
+    {
+      pattern: /[a-zA-Z]/,
+      message: t("auth.passwordMustContainLetter"),
+      type: "error",
+    },
+    {
+      pattern: /\d/,
+      message: t("auth.passwordMustContainNumber"),
+      type: "error",
+    },
+  ],
   confirmPassword: [
-    { required: true, message: t('auth.confirmPasswordRequired'), type: 'error' },
+    {
+      required: true,
+      message: t("auth.confirmPasswordRequired"),
+      type: "error",
+    },
     {
       validator: (val: string) => val === registerData.password,
-      message: t('auth.passwordMismatch'),
-      type: 'error'
-    }
-  ]
-}))
+      message: t("auth.passwordMismatch"),
+      type: "error",
+    },
+  ],
+}));
 
 // Toggle login/register mode
 const toggleMode = () => {
-  isRegisterMode.value = !isRegisterMode.value && registrationEnabled.value
+  isRegisterMode.value = !isRegisterMode.value;
 
-  Object.keys(registerData).forEach(key => {
-    (registerData as any)[key] = ''
-  })
-}
+  Object.keys(registerData).forEach((key) => {
+    (registerData as any)[key] = "";
+  });
+};
 
 // Toggle language menu
 const toggleLanguageMenu = () => {
-  showLanguageMenu.value = !showLanguageMenu.value
-}
+  showLanguageMenu.value = !showLanguageMenu.value;
+};
 
 // Select language
 const selectLanguage = (lang: string) => {
-  locale.value = lang
-  localStorage.setItem('locale', lang)
-  showLanguageMenu.value = false
-  MessagePlugin.success(t('language.languageSaved'))
-}
+  locale.value = lang;
+  localStorage.setItem("locale", lang);
+  showLanguageMenu.value = false;
+  MessagePlugin.success(t("language.languageSaved"));
+};
 
 // Close language menu when clicking outside
 const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement
-  if (!target.closest('.language-switch')) {
-    showLanguageMenu.value = false
+  const target = event.target as HTMLElement;
+  if (!target.closest(".language-switch")) {
+    showLanguageMenu.value = false;
   }
-}
+};
 
 // Add click outside listener
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
+  document.addEventListener("click", handleClickOutside);
+});
 
 onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener("click", handleClickOutside);
+});
 
 const persistLoginResponse = async (response: any, skipRedirect = false) => {
   // Backend renamed `tenant` to `active_tenant` and added `memberships`
   // when tenant-level RBAC landed (issue #1303). The two are otherwise
   // identical — `active_tenant` is the tenant whose ID is encoded in the
   // JWT, defaulting to the user's home tenant on a fresh login.
-  const activeTenant = response.active_tenant || response.tenant
+  const activeTenant = response.active_tenant || response.tenant;
   if (response.user && response.token) {
     // user.tenant_id must be the user's HOME tenant (the immutable row
     // on the users table); useHomeTenant() and the home-badge logic both
     // assume so. The ACTIVE tenant (which can differ from home when the
     // server honoured a remembered last-active-tenant preference) is
     // expressed separately via setSelectedTenant below.
-    const homeTenantIdRaw = response.user.tenant_id ?? activeTenant?.id ?? ''
-    authStore.setUser(userInfoFromApi(response.user, homeTenantIdRaw))
-    authStore.setToken(response.token)
+    const homeTenantIdRaw = response.user.tenant_id ?? activeTenant?.id ?? "";
+    authStore.setUser(userInfoFromApi(response.user, homeTenantIdRaw));
+    authStore.setToken(response.token);
     if (response.refresh_token) {
-      authStore.setRefreshToken(response.refresh_token)
+      authStore.setRefreshToken(response.refresh_token);
     }
     if (activeTenant) {
       authStore.setTenant({
-        id: String(activeTenant.id) || '',
-        name: activeTenant.name || '',
-        owner_id: response.user.id || '',
+        id: String(activeTenant.id) || "",
+        name: activeTenant.name || "",
+        owner_id: response.user.id || "",
         created_at: activeTenant.created_at || new Date().toISOString(),
-        updated_at: activeTenant.updated_at || new Date().toISOString()
-      })
+        updated_at: activeTenant.updated_at || new Date().toISOString(),
+      });
     } else {
-      authStore.setTenant(null)
+      authStore.setTenant(null);
     }
     if (Array.isArray(response.memberships)) {
-      authStore.setMemberships(response.memberships)
+      authStore.setMemberships(response.memberships);
     }
     // If the backend dropped us into a non-home tenant (honoured a
     // remembered "last active tenant" preference), set the override so
     // subsequent requests carry X-Tenant-ID and the UI stays consistent.
     // Otherwise clear any stale override left in localStorage by a
     // previous session for a different account.
-    const activeIdNum = Number(activeTenant?.id)
-    const homeIdNum = Number(homeTenantIdRaw)
+    const activeIdNum = Number(activeTenant?.id);
+    const homeIdNum = Number(homeTenantIdRaw);
     if (Number.isFinite(activeIdNum) && Number.isFinite(homeIdNum) && activeIdNum !== homeIdNum) {
-      authStore.setSelectedTenant(activeIdNum, activeTenant?.name || null)
+      authStore.setSelectedTenant(activeIdNum, activeTenant?.name || null);
     } else {
-      authStore.setSelectedTenant(null, null)
+      authStore.setSelectedTenant(null, null);
     }
   }
 
   // Pull runtime capabilities (including whether ordinary users may create
   // workspaces) before entering the main UI so create actions never flash
   // briefly when the deployment is invitation-only.
-  await authStore.refreshFromAuthMe()
-  await nextTick()
-  if (skipRedirect) return
-  router.replace(authStore.hasValidTenant ? '/platform/knowledge-bases' : '/onboarding/workspace')
-}
+  await authStore.refreshFromAuthMe();
+  await nextTick();
+  if (skipRedirect) return;
+  router.replace(authStore.hasValidTenant ? "/platform/knowledge-bases" : "/onboarding/workspace");
+};
 
-const getBackendOIDCRedirectURI = () => `${window.location.origin}${getApiBaseUrl()}/api/v1/auth/oidc/callback`
+const getBackendOIDCRedirectURI = () => `${window.location.origin}/api/v1/auth/oidc/callback`;
 
 const loadOIDCConfig = async () => {
   try {
-    const response = await getOIDCConfig()
-    oidcEnabled.value = !!response.success && !!response.enabled
-    oidcProviderName.value = response.provider_display_name || ''
+    const response = await getOIDCConfig();
+    oidcEnabled.value = !!response.success && !!response.enabled;
+    oidcProviderName.value = response.provider_display_name || "";
   } catch {
-    oidcEnabled.value = false
-    oidcProviderName.value = ''
+    oidcEnabled.value = false;
+    oidcProviderName.value = "";
   }
-}
+};
 
-// Registration stays hidden if configuration cannot be loaded.
+// loadAuthConfig fetches /auth/config and caches whether self-service
+// registration is allowed. Failures fall back to "enabled" so a transient
+// network glitch doesn't lock new users out of an open deployment.
 const loadAuthConfig = async () => {
   try {
-    const response = await getAuthConfig()
-    registrationMode.value = response.success ? response.registration_mode : ''
-    complexPasswordEnabled.value = response.complex_password_enabled
+    const response = await getAuthConfig();
+    registrationEnabled.value = response.registration_mode !== "invite_only";
   } catch {
-    registrationMode.value = ''
-    complexPasswordEnabled.value = false
+    registrationEnabled.value = true;
   }
-}
+};
 
 const handleOIDCLogin = async () => {
   try {
-    oidcLoading.value = true
-    const response = await getOIDCAuthorizationURL(getBackendOIDCRedirectURI())
-    const authorizationURL = response.authorization_url
+    oidcLoading.value = true;
+    const response = await getOIDCAuthorizationURL(getBackendOIDCRedirectURI());
+    const authorizationURL = response.authorization_url;
 
     if (!response.success || !authorizationURL) {
-      MessagePlugin.error(response.message || t('auth.oidcLoginFailed'))
-      return
+      MessagePlugin.error(response.message || t("auth.oidcLoginFailed"));
+      return;
     }
 
     // 跳转 IdP 会丢失 URL 中的 token，暂存到 sessionStorage，回调后由 App.vue 兑换。
     if (inviteToken.value) {
-      sessionStorage.setItem('weknora_pending_invite_token', inviteToken.value)
+      sessionStorage.setItem("weknora_pending_invite_token", inviteToken.value);
     }
-    window.location.href = authorizationURL
+    window.location.href = authorizationURL;
   } catch (error: any) {
-    console.error('OIDC 登录跳转失败:', error)
-    MessagePlugin.error(error.message || t('auth.oidcLoginFailed'))
+    console.error("OIDC 登录跳转失败:", error);
+    MessagePlugin.error(error.message || t("auth.oidcLoginFailed"));
   } finally {
-    oidcLoading.value = false
+    oidcLoading.value = false;
   }
-}
+};
 
 // 用 token 加入空间并进入应用。会话此时已有效，故即便 token 失效也照常进入（避免困在登录页）。
 const acceptAndEnter = async (token: string) => {
-  loading.value = true
+  loading.value = true;
   try {
-    const result = await authStore.acceptInvitationByTokenAndRefresh(token)
+    const result = await authStore.acceptInvitationByTokenAndRefresh(token);
     if (result.ok) {
-      MessagePlugin.success(t('inviteRegister.joined'))
+      MessagePlugin.success(t("inviteRegister.joined"));
     } else {
-      MessagePlugin.warning(t('inviteRegister.invalidBody'))
+      MessagePlugin.warning(t("inviteRegister.invalidBody"));
     }
   } catch {
-    MessagePlugin.warning(t('inviteRegister.invalidBody'))
+    MessagePlugin.warning(t("inviteRegister.invalidBody"));
   } finally {
-    loading.value = false
-    await nextTick()
-    router.replace('/platform/knowledge-bases')
+    loading.value = false;
+    await nextTick();
+    router.replace("/platform/knowledge-bases");
   }
-}
+};
 
 // Handle login
 const handleLogin = async () => {
   try {
-    const valid = await formRef.value?.validate()
-    if (valid !== true) return
+    const valid = await formRef.value?.validate();
+    if (valid !== true) return;
 
-    loading.value = true
+    loading.value = true;
 
     const response = await login({
       email: formData.email,
       password: formData.password,
-    })
+    });
 
     if (response.success) {
       if (inviteToken.value) {
         // 从邀请链接登录：持久化会话后兑换 token 并进入对应空间。
-        await persistLoginResponse(response, true)
-        await acceptAndEnter(inviteToken.value)
-        return
+        await persistLoginResponse(response, true);
+        await acceptAndEnter(inviteToken.value);
+        return;
       }
-      await persistLoginResponse(response)
-      notifyLoginSuccess(response, t, tm, formatRole, roleIcon)
+      await persistLoginResponse(response);
+      notifyLoginSuccess(response, t, tm, formatRole, roleIcon);
     } else {
-      MessagePlugin.error(response.message || t('auth.loginError'))
+      MessagePlugin.error(response.message || t("auth.loginError"));
     }
   } catch (error: any) {
-    console.error('登录错误:', error)
-    MessagePlugin.error(error.message || t('auth.loginErrorRetry'))
+    console.error("登录错误:", error);
+    MessagePlugin.error(error.message || t("auth.loginErrorRetry"));
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Handle registration. Dispatches based on whether the user arrived
 // with a share-link token: with token -> register-by-invite (auto-
 // login on success); without -> the normal self-service register
 // (drops back to the login form for the user to sign in).
 const handleRegister = async () => {
-  if (!registrationEnabled.value) return
   try {
-    const valid = await registerFormRef.value?.validate()
-    if (valid !== true) return
+    const valid = await registerFormRef.value?.validate();
+    if (valid !== true) return;
 
-    loading.value = true
+    loading.value = true;
 
     if (inviteToken.value) {
       const response = await registerByInvite({
@@ -716,46 +726,46 @@ const handleRegister = async () => {
         username: registerData.username,
         email: registerData.email,
         password: registerData.password,
-      })
+      });
       if (!response.success) {
-        MessagePlugin.error(response.message || t('auth.registerFailed'))
-        return
+        MessagePlugin.error(response.message || t("auth.registerFailed"));
+        return;
       }
-      MessagePlugin.success(t('auth.registerSuccess'))
+      MessagePlugin.success(t("auth.registerSuccess"));
       // register-by-invite returns the same shape as login (token +
       // active_tenant + memberships), so reuse the login persistence
       // path — same store writes, same redirect target.
-      await persistLoginResponse(response)
-      return
+      await persistLoginResponse(response);
+      return;
     }
 
     const response = await register({
       username: registerData.username,
       email: registerData.email,
-      password: registerData.password
-    })
+      password: registerData.password,
+    });
 
     if (response.success) {
-      MessagePlugin.success(t('auth.registerSuccess'))
+      MessagePlugin.success(t("auth.registerSuccess"));
 
       // Switch to login mode and fill in email
-      isRegisterMode.value = false
-      formData.email = registerData.email
+      isRegisterMode.value = false;
+      formData.email = registerData.email;
 
       // Clear register form
-      Object.keys(registerData).forEach(key => {
-        (registerData as any)[key] = ''
-      })
+      Object.keys(registerData).forEach((key) => {
+        (registerData as any)[key] = "";
+      });
     } else {
-      MessagePlugin.error(response.message || t('auth.registerFailed'))
+      MessagePlugin.error(response.message || t("auth.registerFailed"));
     }
   } catch (error: any) {
-    console.error('注册错误:', error)
-    MessagePlugin.error(error.message || t('auth.registerError'))
+    console.error("注册错误:", error);
+    MessagePlugin.error(error.message || t("auth.registerError"));
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Check if already logged in; for lite edition, attempt transparent auto-setup
 onMounted(async () => {
@@ -767,406 +777,462 @@ onMounted(async () => {
   // redirect so an existing session doesn't bounce the user to
   // /platform (and possibly back to /login if the session is stale),
   // dropping the invite token along the way.
-  const tokenFromQuery = String(route.query.token || '').trim()
+  const tokenFromQuery = String(route.query.token || "").trim();
   if (tokenFromQuery) {
-    inviteToken.value = tokenFromQuery
-    inviteLookupLoading.value = true
+    inviteToken.value = tokenFromQuery;
+    inviteLookupLoading.value = true;
     // 1. 先校验 token：无效/过期则停在登录页报错，不进注册模式。
     try {
-      const resp = await getInvitationByToken(tokenFromQuery)
+      const resp = await getInvitationByToken(tokenFromQuery);
       if (resp.success && resp.data) {
-        inviteLookup.value = resp.data
+        inviteLookup.value = resp.data;
       } else {
-        inviteLookupError.value = resp.message || t('inviteRegister.invalidBody')
-        loadOIDCConfig()
-        loadAuthConfig()
-        return
+        inviteLookupError.value = resp.message || t("inviteRegister.invalidBody");
+        loadOIDCConfig();
+        loadAuthConfig();
+        return;
       }
     } catch {
-      inviteLookupError.value = t('inviteRegister.invalidBody')
-      loadOIDCConfig()
-      loadAuthConfig()
-      return
+      inviteLookupError.value = t("inviteRegister.invalidBody");
+      loadOIDCConfig();
+      loadAuthConfig();
+      return;
     } finally {
-      inviteLookupLoading.value = false
+      inviteLookupLoading.value = false;
     }
 
-    // 2. 已登录则直接兑换 token 进入空间（三种模式通用）。
+    // 2. 已登录则直接兑换 token 进入空间（两种模式通用）。
     if (authStore.isLoggedIn && (await authStore.refreshFromAuthMe())) {
-      await acceptAndEnter(tokenFromQuery)
-      return
+      await acceptAndEnter(tokenFromQuery);
+      return;
     }
 
-    // 3. Only enabled registration modes may create an invited account.
-    await loadAuthConfig()
-    isRegisterMode.value = registrationEnabled.value
-    loadOIDCConfig()
-    return
+    // 3. 未登录：按注册模式决定界面。invite_only 停在登录页、登录后再兑换；self_serve 保持注册流程。
+    const cfg = await getAuthConfig();
+    const inviteOnly = cfg.registration_mode === "invite_only";
+    registrationEnabled.value = !inviteOnly;
+    isRegisterMode.value = !inviteOnly;
+    loadOIDCConfig();
+    return;
   }
 
   if (authStore.isLoggedIn) {
-    router.replace('/platform/knowledge-bases')
-    return
+    router.replace("/platform/knowledge-bases");
+    return;
   }
 
-  localStorage.removeItem('weknora_auto_setup_failed')
-  try {
-    const response = await autoSetup()
-    if (response.success) {
-      authStore.setLiteMode(true)
-      await persistLoginResponse(response)
-      return
+  const AUTO_SETUP_FAILED_KEY = "weknora_auto_setup_failed";
+  if (localStorage.getItem(AUTO_SETUP_FAILED_KEY) !== "true") {
+    try {
+      const response = await autoSetup();
+      if (response.success) {
+        authStore.setLiteMode(true);
+        await persistLoginResponse(response);
+        return;
+      } else {
+        localStorage.setItem(AUTO_SETUP_FAILED_KEY, "true");
+      }
+    } catch {
+      localStorage.setItem(AUTO_SETUP_FAILED_KEY, "true");
     }
-  } catch {
-    // Auto-setup may be unavailable outside the native Lite shell.
   }
 
-  loadOIDCConfig()
-  loadAuthConfig()
-})
+  loadOIDCConfig();
+  loadAuthConfig();
+});
 </script>
 
 <style lang="less" scoped>
 .login-layout {
-  display: flex;
   width: 100%;
   min-height: 100%;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: flex-end;
+  // align-items: center; /* 水平方向居中 */
   overflow: hidden;
-  position: relative;
-  background: linear-gradient(225deg, #022c22 0%, #064e3b 15%, #065f46 25%, #047857 38%, #059669 50%, #07C05F 65%, #10B981 78%, #34D399 90%, #6EE7B7 100%);
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.06) 0%, transparent 50%),
-      radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.04) 0%, transparent 50%);
-    pointer-events: none;
-  }
-}
-
-.animated-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-  contain: strict;
-}
-
-.knowledge-node {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    0 0 15px rgba(255, 255, 255, 0.35),
-    0 0 30px rgba(16, 185, 129, 0.2),
-    inset 0 0 8px rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: nodePulse 5s infinite ease-in-out;
-  will-change: transform, opacity;
-}
-
-.node-icon {
-  width: 20px;
-  height: 20px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.node-1 {
-  top: 15%;
-  left: 20%;
-  animation-delay: 0s;
-}
-
-.node-2 {
-  top: 25%;
-  left: 35%;
-  animation-delay: 0.5s;
-}
-
-.node-3 {
-  top: 20%;
-  left: 55%;
-  animation-delay: 1s;
-}
-
-.node-4 {
-  top: 30%;
-  left: 75%;
-  animation-delay: 1.5s;
-}
-
-.node-5 {
-  top: 45%;
-  left: 25%;
-  animation-delay: 2s;
-}
-
-.node-6 {
-  top: 50%;
-  left: 45%;
-  animation-delay: 2.5s;
-}
-
-.node-7 {
-  top: 48%;
-  left: 65%;
-  animation-delay: 3s;
-}
-
-.node-8 {
-  top: 60%;
-  left: 20%;
-  animation-delay: 0.3s;
-}
-
-.node-9 {
-  top: 12%;
-  right: 15%;
-  animation-delay: 1.8s;
-}
-
-.node-10 {
-  top: 38%;
-  right: 10%;
-  animation-delay: 2.3s;
-}
-
-.node-11 {
-  top: 70%;
-  left: 40%;
-  animation-delay: 0.8s;
-}
-
-.node-12 {
-  top: 65%;
-  left: 80%;
-  animation-delay: 1.3s;
-}
-
-@keyframes nodePulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.65;
-  }
-
-  50% {
-    transform: scale(1.08);
-    opacity: 0.9;
-  }
-}
-
-.knowledge-lines {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.35;
-}
-
-.connection-line {
-  stroke: rgba(255, 255, 255, 0.5);
-  stroke-width: 1.5;
-  stroke-dasharray: 6, 3;
-  stroke-linecap: round;
-  animation: lineFlow 10s infinite linear;
-  will-change: stroke-dashoffset;
-}
-
-.line-1 {
-  animation-delay: 0s;
-}
-
-.line-2 {
-  animation-delay: 0.5s;
-}
-
-.line-3 {
-  animation-delay: 1s;
-}
-
-.line-4 {
-  animation-delay: 0.3s;
-}
-
-.line-5 {
-  animation-delay: 0.8s;
-}
-
-.line-6 {
-  animation-delay: 1.3s;
-}
-
-.line-7 {
-  animation-delay: 1.8s;
-}
-
-.line-8 {
-  animation-delay: 2.3s;
-}
-
-.line-9 {
-  animation-delay: 0.2s;
-}
-
-.line-10 {
-  animation-delay: 0.7s;
-}
-
-.line-11 {
-  animation-delay: 0.9s;
-}
-
-.line-12 {
-  animation-delay: 1.5s;
-}
-
-@keyframes lineFlow {
-  0% {
-    stroke-dashoffset: 0;
-  }
-
-  100% {
-    stroke-dashoffset: 18;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .knowledge-node {
-    animation: none;
-    opacity: 0.65;
-  }
-
-  .connection-line {
-    animation: none;
-  }
-}
-
-/* Left Showcase Section */
-.showcase-section {
-  flex: 0 0 52%;
-  display: flex;
-  align-items: flex-end;
-  padding: 100px 30px 100px 50px;
-  box-sizing: border-box;
-  position: relative;
-}
-
-.showcase-content {
-  width: 100%;
-  max-width: 600px;
-  position: relative;
-  z-index: 2;
+  color: #fff;
+  background:
+    radial-gradient(900px 620px at 12% 8%, rgba(52, 211, 153, 0.16), transparent 62%), radial-gradient(760px 560px at 88% 92%, rgba(16, 185, 129, 0.12), transparent 60%),
+    linear-gradient(135deg, #052e22 0%, #0a4a36 52%, #0e6b4f 100%);
+  min-height: 99vh;
+  overflow: hidden !important;
+  -webkit-font-smoothing: antialiased;
   display: flex;
   flex-direction: column;
-  margin-bottom: 60px;
 }
-
-.showcase-subtitle {
-  margin-top: 0;
-  font-size: 22px;
-  color: rgba(255, 255, 255, 0.95);
-  margin: 0 0 8px 0;
-  font-family: var(--app-font-family);
-  line-height: 1.4;
-  font-weight: 500;
+/* ============ 背景装饰：网格 + 数据星座 ============ */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 72px), repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 72px);
+  mask-image: radial-gradient(1200px 800px at 50% 40%, #000 30%, transparent 100%);
 }
-
-.showcase-description {
-  font-size: var(--app-text-lg);
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 28px 0;
-  font-family: var(--app-font-family);
-  line-height: 1.5;
-}
-
-.feature-tags {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 40px;
-  flex-wrap: wrap;
-}
-
-.tag {
-  display: inline-block;
-  padding: 8px 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  color: var(--td-text-color-anti);
-  font-size: var(--app-text-base);
-  font-weight: 500;
-  font-family: var(--app-font-family);
-}
-
-/* Carousel */
-.carousel-container {
-  width: 100%;
-  margin-top: 48px;
-}
-
-.screenshot-swiper {
-  width: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  padding-bottom: 40px;
-
-  :deep(.swiper-wrapper) {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  :deep(.swiper-pagination) {
-    bottom: 15px !important;
-    z-index: 10;
-  }
-
-  :deep(.swiper-pagination-bullet) {
-    width: 10px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 1;
-    transition: all var(--app-motion-slow) ease;
-    margin: 0 6px !important;
-  }
-
-  :deep(.swiper-pagination-bullet-active) {
-    background: var(--td-bg-color-container);
-    width: 28px;
-    border-radius: 5px;
-  }
-}
-
-.slide-content {
+/* 网格 */
+.bg-net {
+  position: fixed;
+  inset: 0;
   width: 100%;
   height: 100%;
-  background: var(--td-bg-color-container);
-  border-radius: 16px;
-  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.9;
+}
+/*连线 */
+.net-dash {
+  stroke-dasharray: 5 9;
+  animation: flow 26s linear infinite;
+}
+@keyframes flow {
+  to {
+    stroke-dashoffset: -560;
+  }
+}
+.float-a {
+  animation: floatY 9s ease-in-out infinite;
+}
+.float-b {
+  animation: floatY 12s ease-in-out infinite reverse;
+}
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+/*线的动画 */
+.glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  animation: drift 18s ease-in-out infinite alternate;
+}
+.glow-1 {
+  //width: 420px;
+  //height: 420px;
+  left: -120px;
+  top: -120px;
+  background: rgba(16, 185, 129, 0.2);
+}
+.glow-2 {
+  //width: 360px;
+  //height: 360px;
+  right: -100px;
+  bottom: -120px;
+  background: rgba(110, 231, 183, 0.12);
+}
+@keyframes drift {
+  to {
+    transform: translate(40px, 26px);
+  }
+}
+/* 漂浮信息玻璃片 */
+.float-chip {
+  position: absolute;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 9px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  // background: rgba(10, 40, 30, 0.55);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  // backdrop-filter: blur(10px);
+  font-size: 12.5px;
+  color: rgba(224, 242, 237, 0.9);
+  box-shadow: 0 14px 34px rgba(2, 20, 14, 0.35);
+}
+.float-chip .fc-ic {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  // background: rgba(52, 211, 153, 0.18);
+  color: #6ee7b7;
+  flex: none;
+}
+.float-chip b {
+  color: #a7f3d0;
+  font-weight: 600;
+}
+.fc-1 {
+  top: 14%;
+  left: 56%;
+  animation: floatY 8s ease-in-out infinite;
+}
+.fc-2 {
+  bottom: 12%;
+  left: 4%;
+  animation: floatY 11s ease-in-out 1.2s infinite;
+}
+/* ============ 页面框架 page ============ */
+/*头部小云智问的标题 */
+.topbar {
+  display: flex;
+  flex: none; // 保持原样的大小
+  justify-content: space-between;
+  padding: 0.7rem;
+}
+// 小云智问标题
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+}
+// 政务内网
+.net-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(110, 231, 183, 0.28);
+  font-size: 12.5px;
+  color: #a7f3d0;
+  // backdrop-filter: blur(6px);
+}
+// 左侧的圆角
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border-radius: 999px;
+  background: rgba(110, 231, 183, 0.1);
+  border: 1px solid rgba(110, 231, 183, 0.35);
+  color: #6ee7b7;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  animation: rise 0.7s 0.05s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 10px #34d399;
 }
 
-.slide-image {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: contain;
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: linear-gradient(135deg, #34d399, #059669);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.45);
+}
+
+.brand-name {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.brand-div {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.brand-sub {
+  font-size: 12.5px;
+  color: rgba(224, 242, 237, 0.62);
+  letter-spacing: 1px;
+}
+
+// 主要的内容区域
+.main-container {
+  display: flex;
+  flex: 1; // 占满剩余的空间
+  padding: 0.5rem;
+  // justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
+}
+.hero {
+  flex: 1.15;
+  max-width: 660px;
+  min-width: 0;
+  height: 50vh;
+}
+
+.hero h1 {
+  margin: 22px 0 18px;
+  font-size: clamp(30px, 3.4vw, 44px);
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: 0.5px;
+  animation: rise 0.7s 0.15s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.hero h1 .grad {
+  background: linear-gradient(92deg, #6ee7b7 10%, #d1fae5 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero h1 .dot {
+  color: #34d399;
+  margin: 0 10px;
+  font-weight: 400;
+}
+.hero .sub {
+  max-width: 560px;
+  font-size: 15.5px;
+  line-height: 1.95;
+  color: rgba(224, 242, 237, 0.8);
+  animation: rise 0.7s 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.hero .sub b {
+  color: #a7f3d0;
+  font-weight: 600;
+}
+
+/* 四大能力卡片 */
+.caps {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 30px;
+}
+.cap {
+  display: flex;
+  gap: 13px;
+  padding: 16px 17px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  // backdrop-filter: blur(8px);
+  transition: 0.28s;
+  animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.cap:nth-child(1) {
+  animation-delay: 0.35s;
+}
+.cap:nth-child(2) {
+  animation-delay: 0.43s;
+}
+.cap:nth-child(3) {
+  animation-delay: 0.51s;
+}
+.cap:nth-child(4) {
+  animation-delay: 0.59s;
+}
+.cap:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(110, 231, 183, 0.4);
+  transform: translateY(-3px);
+}
+.cap-ic {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: rgba(52, 211, 153, 0.14);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  color: #6ee7b7;
+}
+.cap h3 {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-bottom: 5px;
+}
+.cap p {
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: rgba(209, 250, 229, 0.62);
+}
+
+/* 数据条 */
+.stats {
+  display: flex;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  animation: rise 0.7s 0.68s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.stat {
+  flex: 1;
+  min-width: 0;
+}
+.stat + .stat {
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 22px;
+  margin-left: 22px;
+}
+.stat .num {
+  font-size: 27px;
+  font-weight: 700;
+  color: #a7f3d0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.5px;
+}
+.stat .num small {
+  font-size: 15px;
+  font-weight: 600;
+  margin-left: 2px;
+}
+.stat .lbl {
+  font-size: 12px;
+  color: rgba(197, 231, 215, 0.6);
+  margin-top: 5px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* 漂浮信息玻璃片 */
+.float-chip {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  // background: rgba(10, 40, 30, 0.55);
+  border: 1px solid rgba(110, 231, 183, 0.3);
+  // backdrop-filter: blur(10px);
+  font-size: 12.5px;
+  color: rgba(224, 242, 237, 0.9);
+  box-shadow: 0 14px 34px rgba(2, 20, 14, 0.35);
+}
+.float-chip .fc-ic {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: rgba(52, 211, 153, 0.18);
+  color: #6ee7b7;
+  flex: none;
+}
+.float-chip b {
+  color: #a7f3d0;
+  font-weight: 600;
+}
+.fc-1 {
+  top: 14%;
+  left: 56%;
+  animation: floatY 8s ease-in-out infinite;
+  opacity: 10%;
+}
+.fc-2 {
+  bottom: 12%;
+  left: 4%;
+  animation: floatY 11s ease-in-out 1.2s infinite;
+  opacity: 10%;
 }
 
 /* Right Form Section */
@@ -1175,7 +1241,7 @@ onMounted(async () => {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 112px 50px 100px 30px;
+  padding: 40px 50px 100px 30px;
   box-sizing: border-box;
   position: relative;
 }
@@ -1188,136 +1254,6 @@ onMounted(async () => {
   z-index: 2;
 }
 
-.header-logo {
-  position: fixed;
-  top: 32px;
-  left: 50px;
-  z-index: 100;
-  cursor: pointer;
-
-  .logo-image {
-    width: 120px;
-    height: auto;
-  }
-}
-
-.header-links {
-  position: fixed;
-  top: 28px;
-  right: 28px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 100;
-}
-
-.header-link {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 9px 15px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: var(--td-text-color-anti);
-  text-decoration: none;
-  font-size: var(--app-text-md);
-  font-weight: 600;
-  font-family: var(--app-font-family);
-  letter-spacing: 0.2px;
-  cursor: pointer;
-  position: relative;
-
-  svg {
-    flex-shrink: 0;
-  }
-
-  .link-text {
-    line-height: 1;
-  }
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgba(255, 255, 255, 0.4);
-    color: var(--td-text-color-anti);
-  }
-}
-
-.language-switch {
-  position: relative;
-
-  button {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: var(--td-text-color-anti);
-
-    .lang-flag-icon {
-      font-size: var(--app-text-xl);
-      line-height: 1;
-      flex-shrink: 0;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    svg:last-child {
-      margin-left: 2px;
-      flex-shrink: 0;
-    }
-  }
-}
-
-.language-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 160px;
-  background: rgba(255, 255, 255, 0.97);
-  border: 1px solid var(--td-component-stroke);
-  border-radius: var(--app-radius-md);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.language-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  cursor: pointer;
-  font-size: var(--app-text-md);
-  font-family: var(--app-font-family);
-  color: var(--td-text-color-primary);
-
-  .lang-flag {
-    font-size: var(--app-text-xl);
-    flex-shrink: 0;
-  }
-
-  .lang-label {
-    flex: 1;
-  }
-
-  .check-icon {
-    color: var(--td-success-color);
-    font-weight: 700;
-    font-size: var(--app-text-base);
-    flex-shrink: 0;
-  }
-
-  &:hover {
-    background: var(--td-bg-color-secondarycontainer);
-  }
-
-  &.active {
-    background: var(--td-success-color-light);
-    color: var(--td-brand-color-active);
-  }
-}
-
 .form-card {
   background: rgba(255, 255, 255, 0.97);
   border-radius: 16px;
@@ -1328,64 +1264,13 @@ onMounted(async () => {
   width: 100%;
 }
 
-/* Share-link invitation banner. Sits above the register form when the
- * user arrived via /register?token=xxx; gives them confirmation of who
- * invited them before they fill anything in. Subtle, neutral card —
- * the page background is heavily brand-coloured already, so a loud
- * tinted banner clashes; we lean on the form's own surface tokens. */
-.invite-banner {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px 14px;
-  margin-bottom: 20px;
-  border-radius: var(--app-radius-lg);
-  background: var(--td-bg-color-container-hover);
-  border: 1px solid var(--td-component-stroke);
-  color: var(--td-text-color-primary);
-}
-
-.invite-banner__icon {
-  margin-top: 2px;
-  font-size: var(--app-text-2xl);
-  flex-shrink: 0;
-  color: var(--td-text-color-secondary);
-}
-
-.invite-banner__text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.invite-banner__title {
-  font-size: var(--app-text-base);
-  font-weight: 600;
-  line-height: 1.4;
-  color: var(--td-text-color-primary);
-}
-
-.invite-banner__hint {
-  font-size: var(--app-text-sm);
-  color: var(--td-text-color-secondary);
-  line-height: 1.5;
-}
-
-.invite-banner--error {
-  background: var(--td-error-color-1);
-  border-color: var(--td-error-color-3);
-  color: var(--td-error-color);
-  font-size: var(--app-text-md);
-}
-
 .form-header {
   text-align: center;
   margin-bottom: 32px;
 }
 
 .form-title {
-  font-size: var(--app-text-4xl);
+  font-size: 24px;
   font-weight: 600;
   color: var(--td-text-color-primary);
   margin: 0 0 6px 0;
@@ -1393,7 +1278,7 @@ onMounted(async () => {
 }
 
 .form-welcome {
-  font-size: var(--app-text-md);
+  font-size: 13px;
   color: var(--td-text-color-secondary);
   margin: 0;
   font-family: var(--app-font-family);
@@ -1402,170 +1287,17 @@ onMounted(async () => {
 .form-hint {
   margin: 10px 0 0;
   padding: 8px 12px;
-  border-radius: var(--app-radius-md);
-  background: var(--td-success-color-light);
+  border-radius: 8px;
+  background: var(--td-success-color-light, rgba(7, 192, 95, 0.08));
   color: var(--td-brand-color-active);
   font-size: 12.5px;
   line-height: 1.5;
   font-family: var(--app-font-family);
 }
 
-/* 注册入口：从底部小字链接升级为带分隔线的醒目次级按钮，
-   让首次访客一眼就能找到「创建账户」。 */
-.register-cta {
-  margin-top: 8px;
-
-  &__divider {
-    position: relative;
-    text-align: center;
-    margin: 4px 0 14px;
-    color: var(--td-text-color-secondary);
-    font-size: var(--app-text-md);
-    font-family: var(--app-font-family);
-
-    span {
-      position: relative;
-      z-index: 1;
-      padding: 0 12px;
-      background: rgba(255, 255, 255, 0.97);
-    }
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 50%;
-      border-top: 1px solid var(--td-component-stroke);
-    }
-  }
-
-  &__button {
-    height: 46px;
-    border-radius: var(--app-radius-md);
-    font-size: var(--app-text-lg);
-    font-weight: 500;
-    border-color: var(--td-brand-color);
-    color: var(--td-brand-color);
-
-    &:hover {
-      border-color: var(--td-brand-color-active);
-      color: var(--td-brand-color-active);
-      background: var(--td-success-color-light);
-    }
-  }
-}
-
-.form-subtitle {
-  font-size: var(--app-text-md);
-  color: var(--td-text-color-secondary);
-  margin: 0;
-  font-family: var(--app-font-family);
-}
-
-.form-content {
-  :deep(.t-form-item__label) {
-    font-size: var(--app-text-base);
-    color: var(--td-text-color-primary);
-    font-weight: 500;
-    margin-bottom: 8px;
-    font-family: var(--app-font-family);
-    display: block;
-    text-align: left;
-  }
-
-  :deep(.t-input) {
-    border: 1px solid var(--td-component-stroke);
-    border-radius: var(--app-radius-md);
-    background: var(--td-bg-color-container);
-    transition: all var(--app-motion-base);
-
-    &:focus-within {
-      border-color: var(--td-brand-color);
-      box-shadow: 0 0 0 3px color-mix(in srgb, var(--td-brand-color) 10%, transparent);
-    }
-
-    &:hover {
-      border-color: var(--td-brand-color);
-    }
-
-    .t-input__inner {
-      border: none !important;
-      box-shadow: none !important;
-      outline: none !important;
-      background: transparent;
-      font-size: var(--app-text-lg);
-      font-family: var(--app-font-family);
-
-      &:focus {
-        border: none !important;
-        box-shadow: none !important;
-        outline: none !important;
-      }
-    }
-
-    .t-input__wrap {
-      border: none !important;
-      box-shadow: none !important;
-    }
-  }
-
-  :deep(.t-form-item) {
-    margin-bottom: 18px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  :deep(.t-form-item__control) {
-    width: 100%;
-  }
-}
-
-.submit-button {
-  height: 46px;
-  border-radius: var(--app-radius-md);
-  font-size: var(--app-text-xl);
-  font-weight: 500;
-  font-family: var(--app-font-family);
-  margin: 20px 0 16px 0;
-}
-
-.oidc-divider {
-  position: relative;
-  margin: 4px 0 6px;
-  text-align: center;
-  color: var(--td-text-color-placeholder);
-  font-size: var(--app-text-sm);
-
-  span {
-    position: relative;
-    z-index: 1;
-    padding: 0 12px;
-    background: rgba(255, 255, 255, 0.95);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    border-top: 1px solid var(--td-component-stroke);
-  }
-}
-
-.oidc-button {
-  height: 46px;
-  border-radius: var(--app-radius-md);
-  font-size: var(--app-text-lg);
-  font-weight: 500;
-}
-
 .form-footer {
   text-align: center;
-  font-size: var(--app-text-base);
+  font-size: 14px;
   color: var(--td-text-color-secondary);
   font-family: var(--app-font-family);
   margin-top: 16px;
@@ -1577,7 +1309,7 @@ onMounted(async () => {
     text-decoration: none;
     margin-left: 4px;
     font-weight: 500;
-    transition: all var(--app-motion-base);
+    transition: all 0.2s;
 
     &:hover {
       color: var(--td-brand-color);
@@ -1600,7 +1332,7 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     margin-bottom: 12px;
-    font-size: var(--app-text-md);
+    font-size: 13px;
     color: var(--td-text-color-secondary);
     font-family: var(--app-font-family);
 
@@ -1617,7 +1349,7 @@ onMounted(async () => {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: var(--app-text-sm);
+      font-size: 12px;
       font-weight: 700;
       margin-right: 10px;
       flex-shrink: 0;
@@ -1640,7 +1372,7 @@ onMounted(async () => {
   }
 
   .showcase-subtitle {
-    font-size: var(--app-text-2xl);
+    font-size: 18px;
   }
 
   .header-logo {
@@ -1671,8 +1403,6 @@ onMounted(async () => {
 @media (max-width: 768px) {
   .login-layout {
     flex-direction: column;
-    padding-top: 64px;
-    box-sizing: border-box;
   }
 
   .knowledge-node:nth-of-type(n + 9) {
@@ -1703,7 +1433,7 @@ onMounted(async () => {
   }
 
   .showcase-subtitle {
-    font-size: var(--app-text-xl);
+    font-size: 16px;
     margin-bottom: 24px;
   }
 
@@ -1716,7 +1446,6 @@ onMounted(async () => {
   }
 
   .form-section {
-    order: -1;
     flex: 0 0 auto;
     padding: 24px;
   }
@@ -1732,7 +1461,7 @@ onMounted(async () => {
 
     .header-link {
       padding: 8px 12px;
-      font-size: var(--app-text-sm);
+      font-size: 12px;
     }
   }
 
@@ -1764,11 +1493,11 @@ onMounted(async () => {
   }
 
   .showcase-subtitle {
-    font-size: var(--app-text-base);
+    font-size: 14px;
   }
 
   .tag {
-    font-size: var(--app-text-sm);
+    font-size: 12px;
     padding: 6px 16px;
   }
 
@@ -1782,13 +1511,9 @@ onMounted(async () => {
     gap: 6px;
     flex-wrap: wrap;
 
-    .link-text {
-      display: none;
-    }
-
     .header-link {
       padding: 7px 10px;
-      font-size: var(--app-text-xs);
+      font-size: 11px;
     }
   }
 
@@ -1802,7 +1527,6 @@ onMounted(async () => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .knowledge-node,
   .connection-line {
     animation: none !important;

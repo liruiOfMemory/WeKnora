@@ -1,8 +1,7 @@
 <template>
   <Teleport to="body">
     <Transition name="settings-modal-shell">
-      <div v-if="visible" class="settings-modal-shell settings-overlay" :class="overlayClass" :style="{ zIndex }"
-        @click.self="emit('close')">
+      <div v-if="visible" class="settings-modal-shell settings-overlay" :class="overlayClass" :style="{ zIndex }" @click.self="emit('close')">
         <div class="settings-modal" role="dialog" aria-modal="true" :aria-label="title">
           <div v-if="loading" class="editor-initializing" role="status" :aria-label="$t('common.loading')">
             <t-loading size="medium" :text="$t('common.loading')" />
@@ -24,9 +23,13 @@
                 <slot name="nav">
                   <template v-for="group in navGroups" :key="group.key">
                     <div class="nav-group-title">{{ group.label }}</div>
-                    <div v-for="item in group.items" :key="item.key" :class="['nav-item', { active: modelValue === item.key }]"
+                    <div
+                      v-for="item in group.items"
+                      :key="item.key"
+                      :class="['nav-item', { active: modelValue === item.key }]"
                       :data-guide="navItemGuidePrefix ? `${navItemGuidePrefix}-${item.key}` : undefined"
-                      @click="emit('update:modelValue', item.key)">
+                      @click="emit('update:modelValue', item.key)"
+                    >
                       <slot name="nav-icon" :item="item" :active="modelValue === item.key">
                         <t-icon :name="item.icon" class="nav-icon" />
                       </slot>
@@ -66,56 +69,56 @@
  * 也能复用 .nav-item / .nav-icon 等基础样式。
  */
 export interface SettingsModalNavItem {
-  key: string
-  label: string
-  icon?: string
-  badge?: number | string | null
+  key: string;
+  label: string;
+  icon?: string;
+  badge?: number | string | null;
   /** 额外的徽标 class，例如 'nav-badge-count' */
-  badgeClass?: string
+  badgeClass?: string;
   /** 徽标为 0 时是否仍显示 */
-  showZeroBadge?: boolean
-  [extra: string]: unknown
+  showZeroBadge?: boolean;
+  [extra: string]: unknown;
 }
 
 export interface SettingsModalNavGroup {
-  key: string
-  label: string
-  items: SettingsModalNavItem[]
+  key: string;
+  label: string;
+  items: SettingsModalNavItem[];
 }
 
 withDefaults(
   defineProps<{
-    visible: boolean
-    title: string
+    visible: boolean;
+    title: string;
     /** 当前分区 key（v-model） */
-    modelValue?: string
-    navGroups?: SettingsModalNavGroup[]
-    loading?: boolean
-    zIndex?: number
-    overlayClass?: string
-    navGuide?: string
-    navItemGuidePrefix?: string
+    modelValue?: string;
+    navGroups?: SettingsModalNavGroup[];
+    loading?: boolean;
+    zIndex?: number;
+    overlayClass?: string;
+    navGuide?: string;
+    navItemGuidePrefix?: string;
   }>(),
   {
-    modelValue: '',
+    modelValue: "",
     navGroups: () => [],
     loading: false,
     zIndex: 1100,
-    overlayClass: '',
-    navGuide: '',
-    navItemGuidePrefix: '',
+    overlayClass: "",
+    navGuide: "",
+    navItemGuidePrefix: "",
   },
-)
+);
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', key: string): void
-  (e: 'close'): void
-}>()
+  (e: "update:modelValue", key: string): void;
+  (e: "close"): void;
+}>();
 
 function showBadge(item: SettingsModalNavItem): boolean {
-  if (item.badge == null || item.badge === '') return false
-  if (typeof item.badge === 'number' && item.badge <= 0) return !!item.showZeroBadge
-  return true
+  if (item.badge == null || item.badge === "") return false;
+  if (typeof item.badge === "number" && item.badge <= 0) return !!item.showZeroBadge;
+  return true;
 }
 </script>
 
@@ -174,7 +177,9 @@ function showBadge(item: SettingsModalNavItem): boolean {
     align-items: center;
     justify-content: center;
     color: var(--td-text-color-secondary);
-    transition: background var(--app-motion-base) ease, color var(--app-motion-base) ease;
+    transition:
+      background var(--app-motion-base) ease,
+      color var(--app-motion-base) ease;
     z-index: 10;
 
     &:hover {
@@ -256,7 +261,9 @@ function showBadge(item: SettingsModalNavItem): boolean {
     margin-bottom: 2px;
     border-radius: var(--app-radius-sm);
     cursor: pointer;
-    transition: background-color var(--app-motion-base) ease, color var(--app-motion-base) ease;
+    transition:
+      background-color var(--app-motion-base) ease,
+      color var(--app-motion-base) ease;
     font-size: var(--app-text-base);
     color: var(--td-text-color-primary);
     user-select: none;
@@ -399,7 +406,9 @@ function showBadge(item: SettingsModalNavItem): boolean {
   transition: opacity var(--app-motion-base) ease;
 
   .settings-modal {
-    transition: transform var(--app-motion-base) ease, opacity var(--app-motion-base) ease;
+    transition:
+      transform var(--app-motion-base) ease,
+      opacity var(--app-motion-base) ease;
   }
 }
 

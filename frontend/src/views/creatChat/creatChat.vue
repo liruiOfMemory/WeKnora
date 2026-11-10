@@ -2,10 +2,24 @@
     <div class="dialogue-wrap">
         <div class="dialogue-answers">
             <div class="dialogue-title" style="--wails-draggable: drag">
-                <span style="--wails-draggable: drag">{{ $t('createChat.title') }}</span>
+                <!-- <span style="--wails-draggable: drag">{{ $t('createChat.title') }}</span> -->
+            <div class="ai-title-container">
+          <div class="decorative-circle floating"></div>
+          <div class="decorative-circle-2 floating" style="animation-delay: -4s"></div>
+
+          <div class="title-content">
+            <h1 class="main-title fade-in-up">智析数据 · 洞见未来</h1>
+            <br />
+            <p class="subtitle fade-in-up" style="animation-delay: 0.2s">AI数据智能分析平台</p>
+
+            <div class="tagline fade-in-up" style="animation-delay: 0.4s">
+              基于<span class="highlight">大数据分析</span>与<span class="highlight">人工智能算法</span>， 深度解析数据趋势，提供精准决策支持与未来洞察， 构建智能化管理体系。
+            </div>
+          </div>
+        </div>
             </div>
             <!-- 推荐问题 -->
-            <div ref="sqContainerRef" class="suggested-questions-container">
+            <div ref="sqContainerRef" class="suggested-questions-container" style="opacity: 0">
                 <!-- 骨架屏占位 -->
                 <div v-if="sqInitialLoad && suggestedQuestions.length === 0" class="suggested-questions-inner">
                     <div class="suggested-questions-title"><t-skeleton animation="gradient"
@@ -316,6 +330,159 @@ async function openProjectDir() {
 
 </script>
 <style lang="less" scoped>
+.ai-title-container {
+  text-align: center;
+  padding: 60px 80px;
+  /* 移除白色背景，使用透明背景 */
+  background: transparent;
+  border-radius: 24px;
+  /* 移除边框和内阴影 */
+  box-shadow: none;
+  position: relative;
+  border: none;
+  max-width: 800px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.ai-title-container:hover {
+  transform: translateY(-5px);
+  /* 移除悬停时的阴影 */
+  box-shadow: none;
+}
+
+.decorative-circle {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, rgba(42, 109, 255, 0.08) 0%, rgba(0, 198, 255, 0.08) 100%);
+  border-radius: 50%;
+  top: 0px;
+  left: -50px;
+  z-index: 0;
+}
+
+.decorative-circle-2 {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, rgba(42, 109, 255, 0.05) 0%, rgba(0, 198, 255, 0.05) 100%);
+  border-radius: 50%;
+  bottom: -40px;
+  right: -40px;
+  z-index: 0;
+}
+
+.title-content {
+  position: relative;
+  z-index: 1;
+}
+
+.main-title {
+  font-size: 3rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #2a6dff 0%, #00c6ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1.2px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 15px rgba(42, 109, 255, 0.15);
+  position: relative;
+  display: inline-block;
+  padding: 0 15px;
+}
+
+.main-title::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 15%;
+  width: 70%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #2a6dff, transparent);
+  border-radius: 2px;
+}
+
+.subtitle {
+  font-size: 1.3rem;
+  color: #555;
+  font-weight: 400;
+  margin-bottom: 40px;
+  letter-spacing: 0.8px;
+  position: relative;
+  display: inline-block;
+  padding: 0 20px;
+}
+
+.subtitle::before,
+.subtitle::after {
+  content: "✦";
+  position: absolute;
+  color: #2a6dff;
+  opacity: 0.6;
+  font-size: 0.8em;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.subtitle::before {
+  left: 0;
+}
+
+.subtitle::after {
+  right: 0;
+}
+
+.tagline {
+  font-size: 1.1rem;
+  color: #666;
+  font-style: normal;
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px 40px;
+  background: linear-gradient(to right, rgba(42, 109, 255, 0.03), rgba(0, 198, 255, 0.03));
+  border-radius: 16px;
+  border: 1px solid rgba(42, 109, 255, 0.08);
+  position: relative;
+}
+
+.tagline::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  background: linear-gradient(45deg, transparent, rgba(42, 109, 255, 0.05), transparent);
+  border-radius: 16px;
+  z-index: -1;
+}
+.highlight {
+  color: #2a6dff;
+  font-weight: 500;
+  position: relative;
+}
+
+.highlight::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #2a6dff, #00c6ff);
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.highlight:hover::after {
+  opacity: 0.6;
+}
+
+// 上面的
 .dialogue-wrap {
     flex: 1;
     display: flex;
