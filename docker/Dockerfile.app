@@ -2,7 +2,7 @@
 FROM --platform=$TARGETPLATFORM node:24-bookworm-slim@sha256:ba849c60be29959425b8734d57b8b4b7d56f98edd9504c9af091d5281095a71e AS browserskill
 WORKDIR /build
 # Use the same optional Debian mirror as the Go builder and runtime stages.
-ARG APK_MIRROR_ARG
+ARG APK_MIRROR_ARG=mirrors.aliyun.com
 # This base image has no CA certificates. Install them from the original HTTP
 # Debian source before swapping in a mirror: mirrors.tencent.com redirects
 # apt to HTTPS, and that handshake fails without a trust store.
@@ -17,7 +17,15 @@ RUN if [ -n "$APK_MIRROR_ARG" ]; then \
     rm -rf /var/lib/apt/lists/*
 ENV RUSTUP_HOME=/usr/local/rustup CARGO_HOME=/usr/local/cargo
 ENV PATH=/usr/local/cargo/bin:$PATH
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+
+# 国内的
+RUN curl --proto '=https' --tlsv1.2 -sSf https://rsproxy.cn/rustup-init.sh | sh -s -- -y --profile minimal --default-toolchain stable \
+    mkdir -p /usr/local/cargo && \
+    echo '[source.crates-io]' > /usr/local/cargo/config.toml && \
+    echo 'replace-with = "rsproxy-sparse"' >> /usr/local/cargo/config.toml && \
+    echo '[source.rsproxy-sparse]' >> /usr/local/cargo/config.toml && \
+    echo 'registry = "sparse+https://rsproxy.cn/index/"' >> /usr/local/cargo/config.toml \
+
 COPY scripts/build_browserskill.sh scripts/browserskill-release.json ./scripts/
 ARG TARGETOS
 ARG TARGETARCH
@@ -30,9 +38,9 @@ WORKDIR /app
 
 # 通过构建参数接收敏感信息
 ARG GOPRIVATE_ARG
-ARG GOPROXY_ARG
+ARG GOPROXY_ARG=https://goproxy.cn,direct
 ARG GOSUMDB_ARG=off
-ARG APK_MIRROR_ARG
+ARG APK_MIRROR_ARG=mirrors.aliyun.com
 
 # 设置Go环境变量
 ENV GOPRIVATE=${GOPRIVATE_ARG}
@@ -106,7 +114,7 @@ FROM debian:12.12-slim
 
 WORKDIR /app
 
-ARG APK_MIRROR_ARG
+ARG APK_MIRROR_ARG=mirrors.aliyun.com
 
 # Pairing derives the gateway URL from the user's page origin by default.
 ENV BROWSERSKILL_BINARY=/opt/weknora/browserskill/bsk \

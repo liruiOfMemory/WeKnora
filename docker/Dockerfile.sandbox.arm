@@ -1,0 +1,213 @@
+# WeKnora Sandbox Image (ARM64 / AMD64 Dynamic Build + Internal Proxy)
+# BuildKit 会根据构建主机自动填充 TARGETPLATFORM (如 linux/arm64 或 linux/amd64)
+ARG TARGETPLATFORM=linux/arm64
+
+# Stage 1: Get Node.js binaries
+FROM --platform=$TARGETPLATFORM node:20-slim AS node-base
+
+FROM --platform=$TARGETPLATFORM 0h9bfiqsofltco34v2-ghcr.xuanyuan.run/astral-sh/uv:0.12.24 AS uv-base
+#FROM --platform=$TARGETPLATFORM 0h9bfiqsofltco34v2-ghcr.xuanyuan.run/ghcr.io/astral-sh/uv:0.12.4-python3.11-alpine AS uv-base
+
+
+# Stage 2: Runtime image (支持 ARM64 / AMD64)
+FROM --platform=$TARGETPLATFORM python:3.12-slim AS runtime
+
+# ==================== [内网代理与 PyPI 镜像源 ARG 参数] ====================
+ARG HTTP_PROXY="http://20.13.18.175:3128"
+ARG HTTPS_PROXY="http://20.13.18.175:3128"
+ARG NO_PROXY="localhost,127.0.0.1"
+# 如果内网有自建 PyPI 镜像源，可在 build-arg 中替换
+ARG PIP_INDEX_URL="https://mirrors.aliyun.com/pypi/simple/"
+# =========================================================================
+
+# Copy Node.js from node image
+COPY --from=node-base /usr/local/bin/node /usr/local/bin/
+COPY --from=node-base /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+    ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx
+
+# Python package manager: uv
+COPY --from=uv-base /uv /usr/local/bin/uv
+RUN ln -s /usr/local/bin/uv /usr/local/bin/uvx
+
+# Node package manager: pnpm
+RUN npm install -g pnpm@11 --registry=https://registry.npmmirror.com
+
+# ==================== [构建期 apt 代理安装] ====================
+RUN http_proxy=${HTTP_PROXY} https_proxy=${HTTPS_PROXY} no_proxy=${NO_PROXY} \
+    apt-get update && apt-get install -y --no-install-recommends \
+    jq \
+    curl \
+    ca-certificates \
+    file \
+    curl \
+    zip \
+    unzip \
+    bzip2 \
+    xz-utils \
+    zstd \
+    git \
+    fontconfig \
+    fonts-noto-cjk \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+# 办公字体添加
+COPY docker/fonts/ /usr/share/fonts/truetype/chinese/
+RUN chmod 644 /usr/share/fonts/truetype/chinese/* && \
+    fc-cache -fv
+
+# =========================================================================
+
+# 用户与目录结构
+RUN groupadd -g 1000 user && \
+    useradd -u 1000 -g user -m -s /bin/bash user
+
+RUN mkdir -p /workspace/input /workspace/output && \
+    chown -R user:user /workspace
+
+# PTY Prompt 配置
+COPY docker/sandbox-pty-prompt.sh /etc/weknora/pty-prompt.sh
+RUN echo '. /etc/weknora/pty-prompt.sh' > /etc/profile.d/zz-weknora-prompt.sh && \
+    echo '. /etc/weknora/pty-prompt.sh' >> /root/.bashrc && \
+    echo '. /etc/weknora/pty-prompt.sh' >> /home/user/.bashrc
+
+# ==================== [核心配置：代理环境与常用依赖] ====================
+
+# 1. 设定 uv 全局镜像源 (AI 在创建 venv 后用 uv/pip 安装包时自动走该源)
+ENV UV_INDEX_URL=${PIP_INDEX_URL} \
+    PIP_INDEX_URL=${PIP_INDEX_URL}
+
+# 2. 预置生产/AI 常用依赖 (防止 AI 临时在沙箱中 pip install 耗时)
+RUN http_proxy=${HTTP_PROXY} https_proxy=${HTTPS_PROXY} \
+    uv pip install --system \
+    numpy \
+    pandas \
+    openpyxl \
+    xlsxwriter \
+    xlwings \
+    python-calamine \
+    styleframe \
+    python-docx \
+    docxtpl \
+    mammoth \
+    pdf2docx \
+    docx2pdf \
+    docxtpl \
+    matplotlib \
+    seaborn \
+    plotly \
+    jinja2 \
+    requests \
+    httpx \
+    urllib3 \
+    python-dateutil
+
+# 配置 Matplotlib 全局默认中文字体与负号显示，同时清理旧缓存
+RUN MPL_CONF=$(python3 -c "import matplotlib; print(matplotlib.matplotlib_fname())") && \
+    sed -i -E 's/^[[:space:]]*#?[[:space:]]*font\.family[[:space:]]*:.*/font.family: sans-serif/' "$MPL_CONF" && \
+    sed -i -E 's/^[[:space:]]*#?[[:space:]]*font\.sans-serif[[:space:]]*:.*/font.sans-serif: KaiTi_GB2312, FangSong_GB2312, FZXiaoBiaoSong-B05S, MOESongUN, Noto Sans CJK SC, DejaVu Sans/' "$MPL_CONF" && \
+    sed -i -E 's/^[[:space:]]*#?[[:space:]]*axes\.unicode_minus[[:space:]]*:.*/axes.unicode_minus: False/' "$MPL_CONF" && \
+    (grep -q '^font\.family:' "$MPL_CONF" || echo 'font.family: sans-serif' >> "$MPL_CONF") && \
+    (grep -q '^font\.sans-serif:' "$MPL_CONF" || echo 'font.sans-serif: KaiTi_GB2312, FangSong_GB2312, FZXiaoBiaoSong-B05S, MOESongUN, Noto Sans CJK SC, DejaVu Sans' >> "$MPL_CONF") && \
+    (grep -q '^axes\.unicode_minus:' "$MPL_CONF" || echo 'axes.unicode_minus: False' >> "$MPL_CONF") && \
+    python3 -c "import matplotlib, shutil; shutil.rmtree(matplotlib.get_cachedir(), ignore_errors=True)"
+
+# 3. 将代理环境变量持久化到系统全局配置中
+ENV http_proxy=${HTTP_PROXY} \
+    https_proxy=${HTTPS_PROXY} \
+    no_proxy=${NO_PROXY} \
+    HTTP_PROXY=${HTTP_PROXY} \
+    HTTPS_PROXY=${HTTPS_PROXY} \
+    NO_PROXY=${NO_PROXY}
+
+RUN echo "export http_proxy=\"${HTTP_PROXY}\"" >> /etc/profile.d/proxy.sh && \
+    echo "export https_proxy=\"${HTTPS_PROXY}\"" >> /etc/profile.d/proxy.sh && \
+    echo "export no_proxy=\"${NO_PROXY}\"" >> /etc/profile.d/proxy.sh && \
+    echo "export HTTP_PROXY=\"${HTTP_PROXY}\"" >> /etc/profile.d/proxy.sh && \
+    echo "export HTTPS_PROXY=\"${HTTPS_PROXY}\"" >> /etc/profile.d/proxy.sh && \
+    echo "export NO_PROXY=\"${NO_PROXY}\"" >> /etc/profile.d/proxy.sh
+
+# =========================================================================
+
+WORKDIR /workspace
+USER root
+
+# Stage 3: Cube template image (仅支持 amd64，如果用不到 Cube 可忽略)
+FROM --platform=linux/amd64 0h9bfiqsofltco34v2-ghcr.xuanyuan.run/tencentcloud/cubesandbox-base:2026.16 AS cube-base
+
+FROM runtime AS cube
+
+ARG TARGETARCH=amd64
+USER root
+RUN if [ "$TARGETARCH" != "amd64" ]; then \
+        echo "cube is linux/amd64 only (cubesandbox-base has no arm64), got TARGETARCH=$TARGETARCH" >&2; \
+        exit 1; \
+    fi
+COPY --from=cube-base /usr/bin/envd /usr/bin/envd
+COPY --from=cube-base /usr/local/bin/cube-entrypoint.sh /usr/local/bin/cube-entrypoint.sh
+
+EXPOSE 49983
+ENTRYPOINT ["/usr/local/bin/cube-entrypoint.sh"]
+
+# Stage 4: desktop environment on top of runtime.
+FROM runtime AS desktop-runtime
+
+USER root
+ENV DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+
+RUN http_proxy=${HTTP_PROXY} https_proxy=${HTTPS_PROXY} no_proxy=${NO_PROXY} \
+    apt-get update && apt-get install -y --no-install-recommends \
+    procps \
+    util-linux \
+    xvfb \
+    x11-utils \
+    x11-xserver-utils \
+    xauth \
+    dbus \
+    dbus-x11 \
+    xfce4 \
+    xfce4-goodies \
+    x11vnc \
+    websockify \
+    xdotool \
+    scrot \
+    fonts-dejavu-core \
+    fonts-noto-cjk \
+    desktop-base \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
+    && rm -f /etc/rcS.d/S??procps /etc/rcS.d/S??x11-common \
+          /etc/rc2.d/S??dbus /etc/rc3.d/S??dbus \
+          /etc/rc4.d/S??dbus /etc/rc5.d/S??dbus
+
+COPY docker/scripts/start-desktop.sh /usr/local/bin/start-desktop.sh
+COPY docker/desktop/xfce4-desktop.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+RUN chmod 0755 /usr/local/bin/start-desktop.sh \
+    && mkdir -p /root/.config/xfce4/xfconf/xfce-perchannel-xml \
+    && cp /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml \
+          /root/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+
+# Stage 5: published desktop image
+FROM desktop-runtime AS desktop
+EXPOSE 6080
+
+# Stage 6: desktop + Cube envd (仅 amd64)
+FROM desktop-runtime AS desktop-cube
+
+ARG TARGETARCH=amd64
+USER root
+RUN if [ "$TARGETARCH" != "amd64" ]; then \
+        echo "desktop-cube is linux/amd64 only (cubesandbox-base has no arm64), got TARGETARCH=$TARGETARCH" >&2; \
+        exit 1; \
+    fi
+COPY --from=cube-base /usr/bin/envd /usr/bin/envd
+COPY --from=cube-base /usr/local/bin/cube-entrypoint.sh /usr/local/bin/cube-entrypoint.sh
+
+ENV ENVD_LOG_FILE=-
+
+EXPOSE 49983 6080
+ENTRYPOINT ["/usr/local/bin/cube-entrypoint.sh"]
+
+# Stage 7: default target (标准 Sandbox)
+FROM runtime AS sandbox
