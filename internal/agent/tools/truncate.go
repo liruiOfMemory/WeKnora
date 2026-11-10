@@ -9,10 +9,10 @@ const (
 	// DefaultMaxToolOutput is the default maximum character (rune) count for tool output.
 	// Outputs exceeding this limit are truncated with head + tail preservation.
 	// This counts Unicode characters (runes), not bytes, so CJK text is treated fairly.
-	DefaultMaxToolOutput = 24000
+	DefaultMaxToolOutput = 160000000
 
 	// headRatio controls the head/tail split when truncating (70% head, 30% tail).
-	headRatio = 0.7
+	headRatio = 0.9
 
 	// truncationMarkerReserve is the rune budget reserved for the truncation marker itself.
 	truncationMarkerReserve = 200

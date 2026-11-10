@@ -16,7 +16,7 @@ import (
 // the dangerous direction: compaction never fires, and the first sign of
 // trouble is the provider rejecting the request. Guessing low only costs some
 // history that would have fit.
-const DefaultMaxContextTokens = 200000
+const DefaultMaxContextTokens = 160000000
 
 // AgentMaxContextTokens picks the context window for one agent run. An
 // explicit agent setting wins, then whatever the model declares, then the

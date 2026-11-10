@@ -6,9 +6,41 @@ import (
 	"fmt"
 
 	"github.com/Tencent/WeKnora/internal/types"
-	"github.com/Tencent/WeKnora/internal/utils"
 )
 
+var todoWriteToolSchema = json.RawMessage(`{
+	"type": "object",
+	"properties": {
+		"task": {
+			"type": "string",
+			"description": "A concise, high-level summary of the ultimate research or data analysis objective."
+		},
+		"steps": {
+			"type": "array",
+			"description": "Decomposed sequential retrieval and execution steps. MUST contain 2 to 7 steps.",
+			"items": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "Unique identifier for this step, ordered sequentially (e.g., 'step1', 'step2')."
+					},
+					"description": {
+						"type": "string",
+						"description": "Actionable retrieval or analysis description. DO NOT include summaries or final answers."
+					},
+					"status": {
+						"type": "string",
+						"description": "Current status of the step.",
+						"enum": ["pending", "in_progress", "completed"]
+					}
+				},
+				"required": ["id", "description", "status"]
+			}
+		}
+	},
+	"required": ["task", "steps"]
+}`)
 var todoWriteTool = BaseTool{
 	name: ToolTodoWrite,
 	description: `Use this tool to create and manage a structured task list for retrieval and research tasks. This helps you track progress, organize complex retrieval operations, and demonstrate thoroughness to the user.
@@ -132,7 +164,8 @@ The assistant did not use the todo list because this is an informational request
 **Important**: After completing all retrieval tasks in todo_write, use the thinking tool to synthesize findings and generate the final answer. The todo_write tool tracks WHAT to retrieve, while thinking tool handles HOW to synthesize and present the information.
 
 When in doubt, use this tool. Being proactive with task management demonstrates attentiveness and ensures you complete all retrieval requirements successfully.`,
-	schema: utils.GenerateSchema[TodoWriteInput](),
+	//schema: utils.GenerateSchema[TodoWriteInput](),
+	schema: todoWriteToolSchema,
 }
 
 // TodoWriteTool implements a planning tool for complex tasks
@@ -143,15 +176,15 @@ type TodoWriteTool struct {
 
 // TodoWriteInput defines the input parameters for todo_write tool
 type TodoWriteInput struct {
-	Task  string     `json:"task,omitempty" jsonschema:"The complex task or question you need to create a plan for"`
-	Steps []PlanStep `json:"steps" jsonschema:"Array of research plan steps with status tracking"`
+	Task  string     `json:"task" jsonschema:"The overall research or retrieval task that requires a step-by-step plan.,required"`
+	Steps []PlanStep `json:"steps" jsonschema:"Array of structured plan steps. You MUST break down the complex task into specific, sequential retrieval steps here.,required,minItems=1"`
 }
 
 // PlanStep represents a single step in the research plan
 type PlanStep struct {
-	ID          string `json:"id" jsonschema:"Unique identifier for this step (e.g., 'step1', 'step2')"`
-	Description string `json:"description" jsonschema:"Clear description of what to investigate or accomplish in this step"`
-	Status      string `json:"status" jsonschema:"Status: pending, in_progress, completed, or skipped"`
+	ID          string `json:"id" jsonschema:"Unique identifier for this step, ordered sequentially (e.g., 'step1', 'step2').,required"`
+	Description string `json:"description" jsonschema:"Actionable retrieval or research task description. DO NOT include summary/thinking tasks.,required"`
+	Status      string `json:"status" jsonschema:"Current status of the step. Must be one of: pending, in_progress, completed.,enum=pending,enum=in_progress,enum=completed,required"`
 }
 
 // NewTodoWriteTool creates a new todo_write tool instance
@@ -175,7 +208,15 @@ func (t *TodoWriteTool) Execute(ctx context.Context, args json.RawMessage) (*typ
 	if input.Task == "" {
 		input.Task = "No task description provided"
 	}
-
+	if len(input.Steps) == 0 && input.Task != "" {
+		input.Steps = []PlanStep{
+			{
+				ID:          "step1",
+				Description: fmt.Sprintf("Automatically generated: Investigate and execute task: %s", input.Task),
+				Status:      "in_progress",
+			},
+		}
+	}
 	// Parse plan steps
 	planSteps := input.Steps
 	for i, step := range planSteps {

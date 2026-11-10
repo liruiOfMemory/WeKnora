@@ -48,9 +48,9 @@ func (r *ToolRegistry) SetMaxToolOutputSize(maxChars int) {
 
 // getMaxToolOutput returns the effective max tool output size.
 func (r *ToolRegistry) getMaxToolOutput() int {
-	if r.maxToolOutputSize > 0 {
-		return r.maxToolOutputSize
-	}
+	//if r.maxToolOutputSize > 0 {
+	//	return r.maxToolOutputSize
+	//}
 	return DefaultMaxToolOutput
 }
 
